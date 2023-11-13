@@ -1,5 +1,5 @@
 {
-    "name": "rezets/beanstalk-bus",
+    "name": "rezets19/beanstalk-bus",
     "type": "library",
     "autoload": {
         "psr-4": {
