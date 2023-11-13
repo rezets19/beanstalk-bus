@@ -6,16 +6,19 @@ use bus\broker\commands\DeleteCommand;
 use bus\broker\commands\KickCommand;
 use bus\broker\exception\BuryStrategyNotFoundException;
 use bus\broker\exception\NothingToDoException;
+use bus\config\ConfigNotFoundException;
 use bus\config\Provider;
 use bus\message\FQMessage;
 use Pheanstalk\Contract\PheanstalkManagerInterface;
+use Pheanstalk\Contract\PheanstalkSubscriberInterface;
+use Pheanstalk\Pheanstalk;
 use Pheanstalk\Values\Job;
 use Psr\Log\LoggerInterface;
 use ReflectionException;
 use Throwable;
 
 /**
- * Handle buried jobs - kick, delete or nothing
+ * Handle buried jobs - kick, delete or do nothing
  *
  * Class BuryChecker
  * @package bus\broker
@@ -41,14 +44,14 @@ class Bury
     }
 
     /**
-     * @param PheanstalkManagerInterface $broker
+     * @param Pheanstalk $broker
      */
-    public function check(PheanstalkManagerInterface $broker): void
+    public function check(Pheanstalk $broker): void
     {
         try {
             while (($job = $broker->peekBuried()) instanceof Job) {
                 try {
-                    $this->consume($job, $broker);
+                    $this->consume($job, $broker, $broker);
                 } catch (NothingToDoException $e) {
                     break;
                 }
@@ -60,14 +63,16 @@ class Bury
 
     /**
      * @param Job $job
-     * @param PheanstalkManagerInterface $broker
+     * @param PheanstalkManagerInterface $manager
+     * @param PheanstalkSubscriberInterface $subscriber
      * @throws BuryStrategyNotFoundException
+     * @throws ConfigNotFoundException
      * @throws NothingToDoException
      * @throws ReflectionException
      */
-    public function consume(Job $job, PheanstalkManagerInterface $broker): void
+    public function consume(Job $job, PheanstalkManagerInterface $manager, PheanstalkSubscriberInterface $subscriber): void
     {
-        $stats = $broker->statsJob($job);
+        $stats = $manager->statsJob($job);
 
         $message = $this->factory->fromString($job->getData());
         $config = $this->configProvider->getByJob($message->getJob());
@@ -75,12 +80,12 @@ class Bury
         $command = $this->getStrategy($config->getBuryStrategy())->check($job, $stats, $config);
 
         if ($command instanceof KickCommand) {
-            $broker->kickJob($command->getJob());
+            $manager->kickJob($command->getJob());
             $this->notice('Kicked id=' . $job->getId() . ' queue=' . $config->getQueue());
         }
 
         if ($command instanceof DeleteCommand) {
-            $broker->delete($command->getJob());
+            $subscriber->delete($command->getJob());
             $this->notice('Deleted id=' . $job->getId() . ' queue=' . $config->getQueue());
         }
     }
