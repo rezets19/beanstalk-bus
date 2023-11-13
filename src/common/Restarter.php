@@ -9,7 +9,7 @@ class Restarter
 {
     private string $tmpPath;
 
-    private int $lastUpdate;
+    private ?int $lastUpdate = null;
 
     private int $lastCheck;
 

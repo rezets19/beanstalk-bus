@@ -19,7 +19,8 @@
         "psr/event-dispatcher": "^1.0"
     },
     "require-dev": {
-        "phpunit/phpunit": "^10.4"
+        "phpunit/phpunit": "^10.4",
+        "zoltanka/bypass-readonly": "^0.0.4"
     },
     "autoload-dev": {
         "psr-4": {
