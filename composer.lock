@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "351e1f3a56adf74a8e6140f28a6b2f46",
+    "content-hash": "ce82696d5d132c6c8039a945fc8114ed",
     "packages": [
         {
             "name": "json-mapper/json-mapper",
@@ -2529,6 +2529,45 @@
                 }
             ],
             "time": "2021-07-28T10:34:58+00:00"
+        },
+        {
+            "name": "zoltanka/bypass-readonly",
+            "version": "0.0.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/zoltanka/bypass-readonly.git",
+                "reference": "7e9a6863f557bc17e74854cd0619e3c4d187b794"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/zoltanka/bypass-readonly/zipball/7e9a6863f557bc17e74854cd0619e3c4d187b794",
+                "reference": "7e9a6863f557bc17e74854cd0619e3c4d187b794",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8.2"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Zfekete\\BypassReadonly\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Z.Fekete",
+                    "email": "fekzol.13ker@gmail.com"
+                }
+            ],
+            "support": {
+                "issues": "https://github.com/zoltanka/bypass-readonly/issues",
+                "source": "https://github.com/zoltanka/bypass-readonly/tree/0.0.4"
+            },
+            "time": "2023-03-31T09:06:39+00:00"
         }
     ],
     "aliases": [],
