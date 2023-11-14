@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\unit;
+namespace Tests\Unit;
 
 use JsonSerializable;
 

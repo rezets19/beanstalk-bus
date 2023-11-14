@@ -12,6 +12,7 @@ use bus\interfaces\APMSenderInterface;
 use bus\message\FQMessage;
 use bus\message\QMessage;
 use bus\message\Sender;
+use Exception;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\Log\LoggerInterface;
 use ReflectionException;
@@ -53,7 +54,7 @@ class MessageBus implements EventDispatcherInterface
     /**
      * @var Sender
      */
-    private ?Sender $sender = null;
+    private Sender $sender;
 
     /**
      * @var APMSenderInterface
@@ -72,6 +73,9 @@ class MessageBus implements EventDispatcherInterface
         $this->apm = $apm;
         $this->fTags = $fTags;
         $this->messageFactory = new FQMessage();
+
+        $this->sender = new Sender($this->connection);
+        $this->handler = new Handler($this->logger);
     }
 
     /**
@@ -95,20 +99,20 @@ class MessageBus implements EventDispatcherInterface
      * @return object
      * @throws BrokerNotFoundException
      * @throws ReflectionException
-     * @throws \Exception
+     * @throws Exception
      */
     public function dispatch(object $job): object
     {
         $config = $this->configProvider->getByJob($job);
 
         if ($config->isAsync()) {
-            $message = $this->getMessageFactory()->create($job, $config);
+            $message = $this->messageFactory->create($job, $config);
             // First delay = zero, then from config
             $message->setDelay(0);
-            $this->sendMessage($config, $message);
+            $this->sender->sendMessage($config, $message);
             $this->apm->metricIncrement(self::METRIC_JOB_ADD_CNT, $this->fTags->create($config));
         } else {
-            $this->getHandler()->handle($job, $config->getHandlers());
+            $this->handler->handle($job, $config->getHandlers());
         }
 
         return $job;
@@ -116,44 +120,12 @@ class MessageBus implements EventDispatcherInterface
 
     /**
      * @param ConfigDto $config
-     * @param $message
+     * @param QMessage $message
      * @return void
      * @throws BrokerNotFoundException
      */
     public function sendMessage(ConfigDto $config, QMessage $message): void
     {
-        $this->getSender()->sendMessage($config, $message);
-    }
-
-    /**
-     * @return Sender
-     */
-    private function getSender(): Sender
-    {
-        if (null === $this->sender) {
-            $this->sender = new Sender($this->connection);
-        }
-
-        return $this->sender;
-    }
-
-    /**
-     * @return Handler
-     */
-    private function getHandler(): Handler
-    {
-        if (null === $this->handler) {
-            $this->handler = new Handler($this->logger);
-        }
-
-        return $this->handler;
-    }
-
-    /**
-     * @return FQMessage
-     */
-    private function getMessageFactory(): FQMessage
-    {
-        return $this->messageFactory;
+        $this->sender->sendMessage($config, $message);
     }
 }

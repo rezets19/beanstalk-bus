@@ -1,0 +1,1 @@
+{ "body": "[\"bus\\\\impl\\\\TEvent\",{\"id\":1,\"name\":\"Some name\"}]", "properties": [], "headers": []}
