@@ -22,6 +22,6 @@ class BodySerializerTest extends TestCase
 
         $json = $this->serializer->toJson($event);
 
-        $this->assertSame('["Tests\\\unit\\\TEvent",{"id":1}]', $json);
+        $this->assertSame('["Tests\\\Unit\\\TEvent",{"id":1}]', $json);
     }
 }

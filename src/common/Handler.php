@@ -41,7 +41,7 @@ class Handler
      * @param string $method
      * @throws ReflectionException
      */
-    public function call(object $event, $closure, string $method): void
+    public function call(object $event, mixed $closure, string $method): void
     {
         if (is_string($closure)) {
             $rc = new ReflectionClass($closure);

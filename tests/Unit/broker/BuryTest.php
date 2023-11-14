@@ -13,7 +13,6 @@ use bus\message\FQMessage;
 use bus\message\QMessage;
 use bus\serializer\IBodySerializer;
 use JsonSerializable;
-use Pheanstalk\Contract\JobIdInterface;
 use Pheanstalk\Contract\PheanstalkManagerInterface;
 use Pheanstalk\Contract\PheanstalkSubscriberInterface;
 use Pheanstalk\Contract\ResponseInterface;
@@ -22,7 +21,6 @@ use Pheanstalk\Values\JobId;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
-use stdClass;
 use Tests\Unit\PrivateProperty;
 use Zfekete\BypassReadonly\BypassReadonly;
 
