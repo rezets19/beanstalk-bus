@@ -2,6 +2,9 @@
 
 Frameworks independent message bus php 8.x library for beanstalkd.
 
+## Install
+``composer require rezets19/beanstalk-bus``
+
 ## Create event and handler
 
 Examples:
