@@ -4,6 +4,7 @@ namespace bus;
 
 use bus\broker\Bury;
 use bus\broker\FBroker;
+use bus\common\Arrays;
 use bus\common\Restarter;
 use bus\config\ConfigNotFoundException;
 use bus\config\Provider;
@@ -65,6 +66,7 @@ class Listener
     private APMSenderInterface $apm;
 
     private FTags $fTags;
+    private Arrays $arrays;
 
     public function __construct(
         string $queue,
@@ -76,7 +78,8 @@ class Listener
         Restarter $restarter,
         Bury $bury,
         APMSenderInterface $apm,
-        FTags $fTags
+        FTags $fTags,
+        Arrays $arrays
     ) {
         $this->queue = $queue;
         $this->logger = $logger;
@@ -88,6 +91,7 @@ class Listener
         $this->bury = $bury;
         $this->apm = $apm;
         $this->fTags = $fTags;
+        $this->arrays = $arrays;
 
         $this->validate();
     }
@@ -128,7 +132,7 @@ class Listener
         $this->bury->check($broker);
 
         try {
-            //$this->console->warningWithBold('Watching tube=' . $this->queue);
+            $this->notice('Watching tube=' . $this->queue);
 
             $job = $broker->reserveWithTimeout(self::RESERVE_TIMEOUT);
 
@@ -139,9 +143,9 @@ class Listener
 
                 $this->apm->metricIncrement(self::METRIC_JOB_PICK_CNT, $this->fTags->create($config));
 
-                /*$this->console->warningWithBold(
+                $this->notice(
                     'Consumed id=' . $job->getId() . ', critical=' . (int)$config->isCritical()
-                );*/
+                );
 
                 if ($config->isCritical()) {
                     $broker->bury($job);
@@ -155,8 +159,12 @@ class Listener
                     $broker->delete($job);
                     $this->notice($e->getMessage());
                 } catch (Throwable $t) {
+                    if ($this->arrays->classExist($t, $config->getFatal())) {
+                        $broker->delete($job);
+                        $this->notice($t->getMessage());
 
-                    //TODO: add exceptions check form list
+                        return;
+                    }
 
                     $this->notice($t->getMessage());
 
@@ -195,7 +203,6 @@ class Listener
     private function notice(string $message): void
     {
         $this->logger->notice($message);
-        //$this->console->warning($message);
     }
 
     private function validate(): void

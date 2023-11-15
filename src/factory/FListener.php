@@ -5,6 +5,7 @@ namespace bus\factory;
 use bus\broker\Bury;
 use bus\broker\dto\FStatsDto;
 use bus\broker\FBroker;
+use bus\common\Arrays;
 use bus\common\Restarter;
 use bus\interfaces\APMSenderInterface;
 use bus\Listener;
@@ -33,7 +34,8 @@ class FListener
             new Restarter($tmpPath),
             new Bury($messageBus->getConfigProvider(), $logger),
             $apm,
-            new FTags()
+            new FTags(),
+            new  Arrays()
         );
     }
 }

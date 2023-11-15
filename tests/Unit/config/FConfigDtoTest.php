@@ -5,6 +5,8 @@ namespace Tests\Unit\config;
 use bus\broker\BuryStrategy;
 use bus\config\FConfigDto;
 use bus\impl\TEventHandler;
+use Exception;
+use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 
 class FConfigDtoTest extends TestCase
@@ -16,7 +18,7 @@ class FConfigDtoTest extends TestCase
         $this->factory = new FConfigDto();
     }
 
-    public function testOk(): void
+    public function test_from_result(): void
     {
         $dto = $this->factory->fromResult($this->getConfig(), '\namespace\ClassName');
 
@@ -33,6 +35,8 @@ class FConfigDtoTest extends TestCase
         $this->assertSame(100, $dto->getTtr());
         $this->assertSame('beanstalk', $dto->getDriver());
         $this->assertSame(BuryStrategy::class, $dto->getBuryStrategy());
+
+        $this->assertSame([Exception::class], $dto->getFatal());
     }
 
     private function getConfig(): array
@@ -53,6 +57,14 @@ class FConfigDtoTest extends TestCase
             'queue_config' => $test_queue,
             'handlers' => [
                 [TEventHandler::class, 'handle2'],
+            ],
+            'exceptions' => [
+                'fatal' => [
+                    Exception::class,
+                ],
+                'repeatable' => [
+                    InvalidArgumentException::class
+                ],
             ],
         ];
     }

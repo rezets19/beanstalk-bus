@@ -1,7 +1,6 @@
 <?php
 
 use bus\broker\BuryStrategy;
-use bus\exception\HandlerNotFoundException;
 use bus\impl\TEvent;
 use bus\impl\TEventHandler;
 
@@ -24,10 +23,7 @@ return [
         ],
         'exceptions' => [
             'fatal' => [
-                Exception::class,
-            ],
-            'repeatable' => [
-                InvalidArgumentException::class
+                \Exception::class,
             ],
         ],
     ],

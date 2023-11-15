@@ -45,6 +45,10 @@ class FConfigDto
             $dto->setBuryStrategy($config['buryStrategy']);
         }
 
+        if (isset($result['exceptions']['fatal'])) {
+            $dto->setFatal($result['exceptions']['fatal']);
+        }
+
         return $dto;
     }
 }
