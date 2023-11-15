@@ -76,6 +76,7 @@ class ConfigDto
      * @var string
      */
     private string $class;
+    private array $fatal = [];
 
     public function __construct()
     {
@@ -208,5 +209,18 @@ class ConfigDto
     public function getClass(): string
     {
         return $this->class;
+    }
+
+    public function setFatal(array $fatal): void
+    {
+        $this->fatal = $fatal;
+    }
+
+    /**
+     * @return array
+     */
+    public function getFatal(): array
+    {
+        return $this->fatal;
     }
 }
