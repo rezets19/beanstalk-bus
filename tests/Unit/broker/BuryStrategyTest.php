@@ -53,7 +53,7 @@ class BuryStrategyTest extends TestCase
         $this->assertInstanceOf(DeleteCommand::class, $command);
     }
 
-    public function testDelete2()
+    public function testDelete2(): void
     {
         $job = new Job(new JobId(1), 'data');
 
@@ -68,7 +68,7 @@ class BuryStrategyTest extends TestCase
         $this->assertInstanceOf(DeleteCommand::class, $command);
     }
 
-    public function testNothingToDO()
+    public function testNothingToDO(): void
     {
         $this->expectException(NothingToDoException::class);
 

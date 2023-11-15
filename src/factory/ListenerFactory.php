@@ -8,6 +8,7 @@ use bus\common\Arrays;
 use bus\common\Restarter;
 use bus\consumer\Consumer;
 use bus\consumer\ExceptionsHandler;
+use bus\handler\IHandler;
 use bus\interfaces\APMSenderInterface;
 use bus\Listener;
 use bus\message\QMessageFactory;
@@ -22,7 +23,8 @@ class ListenerFactory
         string $tmpPath,
         MessageBus $messageBus,
         LoggerInterface $logger,
-        APMSenderInterface $apm
+        APMSenderInterface $apm,
+        IHandler $handler
     ): Listener
     {
         return new Listener(
@@ -36,8 +38,8 @@ class ListenerFactory
                 messageFactory: new QMessageFactory(),
                 configProvider: $messageBus->getConfigProvider(),
                 apm: $apm,
-                fTags: new TagsFactory(),
-                processor: new Processor($messageBus, $logger),
+                tagsFactory: new TagsFactory(),
+                processor: new Processor($messageBus, $logger, $handler),
                 arrays: new  Arrays(),
                 exceptionsHandler:  new ExceptionsHandler(
                     $logger,

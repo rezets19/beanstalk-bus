@@ -2,7 +2,7 @@
 
 namespace Tests\Unit\common;
 
-use bus\common\Handler;
+use bus\handler\Handler;
 use Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -25,7 +25,7 @@ class HandlerTest extends TestCase
         restore_error_handler();
     }
 
-    public function testClassNotFound()
+    public function testClassNotFound(): void
     {
         $this->expectException(ReflectionException::class);
 
@@ -35,7 +35,7 @@ class HandlerTest extends TestCase
         $this->handler->handle($event, [['a', 'handle']]);
     }
 
-    public function testExecutedOk()
+    public function testExecutedOk(): void
     {
         $this->expectException(Exception::class);
 
@@ -45,7 +45,7 @@ class HandlerTest extends TestCase
         $this->handler->call($event, TEventHandler::class, 'handle');
     }
 
-    public function testExecutedOkFunction()
+    public function testExecutedOkFunction(): void
     {
         $this->expectException(Exception::class);
 

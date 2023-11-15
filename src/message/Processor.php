@@ -2,11 +2,11 @@
 
 namespace bus\message;
 
-use bus\common\Handler;
 use bus\config;
 use bus\config\Provider;
 use bus\exception;
 use bus\exception\HandlerNotFoundException;
+use bus\handler\IHandler;
 use bus\MessageBus;
 use Psr\Log\LoggerInterface;
 use ReflectionException;
@@ -29,16 +29,15 @@ class Processor
      */
     private Provider $configProvider;
 
-    /**
-     * @var Handler
-     */
-    private Handler $handler;
-
-    public function __construct(private MessageBus $messageBus, private LoggerInterface $logger)
+    public function __construct(
+        private MessageBus      $messageBus,
+        private LoggerInterface $logger,
+        private IHandler        $handler
+    )
     {
         $this->configProvider = $this->messageBus->getConfigProvider();
         $this->factory = new QMessageFactory();
-        $this->handler = new Handler($this->logger);
+        //$this->handler = new Handler($this->logger);
     }
 
     /**
