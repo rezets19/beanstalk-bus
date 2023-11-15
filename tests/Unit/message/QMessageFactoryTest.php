@@ -2,16 +2,16 @@
 
 namespace Tests\Unit\message;
 
-use bus\message\FQMessage;
+use bus\message\QMessageFactory;
 use PHPUnit\Framework\TestCase;
 
-class FQMessageTest extends TestCase
+class QMessageFactoryTest extends TestCase
 {
-    private FQMessage $factory;
+    private QMessageFactory $factory;
 
     protected function setUp(): void
     {
-        $this->factory = new FQMessage();
+        $this->factory = new QMessageFactory();
     }
 
     public function testFromString(): void

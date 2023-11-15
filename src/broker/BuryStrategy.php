@@ -6,7 +6,7 @@ use bus\broker\commands\DeleteCommand;
 use bus\broker\commands\ICommand;
 use bus\broker\commands\KickCommand;
 use bus\broker\exception\NothingToDoException;
-use bus\config\ConfigDto;
+use bus\config\Config;
 use Pheanstalk\Contract\JobIdInterface;
 use Pheanstalk\Values\JobStats;
 
@@ -27,11 +27,11 @@ class BuryStrategy implements IBuryStrategy
      *
      * @param JobIdInterface $job
      * @param JobStats $stats
-     * @param ConfigDto $config
+     * @param Config $config
      * @return ICommand
      * @throws NothingToDoException
      */
-    public function check(JobIdInterface $job, JobStats $stats, ConfigDto $config): ICommand
+    public function check(JobIdInterface $job, JobStats $stats, Config $config): ICommand
     {
         if ($stats->age >= $config->getMaxAge() && $stats->kicks < $config->getMaxKicks()) {
             // Return job into ready state

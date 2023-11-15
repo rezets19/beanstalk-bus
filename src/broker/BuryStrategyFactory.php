@@ -5,15 +5,17 @@ namespace bus\broker;
 use bus\broker\exception\BuryStrategyNotFoundException;
 use Psr\Log\LoggerInterface;
 
-class FBuryStrategy
+class BuryStrategyFactory
 {
-    private LoggerInterface $logger;
-
-    public function __construct(LoggerInterface $logger)
+    public function __construct(private LoggerInterface $logger)
     {
-        $this->logger = $logger;
     }
 
+    /**
+     * @param string $class
+     * @return IBuryStrategy
+     * @throws BuryStrategyNotFoundException
+     */
     public function create(string $class): IBuryStrategy
     {
         if (BuryStrategy::class === $class) {

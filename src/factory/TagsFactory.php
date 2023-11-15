@@ -2,11 +2,11 @@
 
 namespace bus\factory;
 
-use bus\config\ConfigDto;
+use bus\config\Config;
 
-class FTags
+class TagsFactory
 {
-    public function create(ConfigDto $config): array
+    public function create(Config $config): array
     {
         $class = substr($config->getClass(), strrpos($config->getClass(), '\\') + 1);
 

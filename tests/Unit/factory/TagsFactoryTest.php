@@ -2,26 +2,26 @@
 
 namespace Tests\Unit\factory;
 
-use bus\config\ConfigDto;
-use bus\factory\FTags;
+use bus\config\Config;
+use bus\factory\TagsFactory;
 use PHPUnit\Framework\TestCase;
 
-class FTagsTest extends TestCase
+class TagsFactoryTest extends TestCase
 {
-    private FTags $factory;
+    private TagsFactory $factory;
 
     public function setUp(): void
     {
-        $this->factory = new FTags();
+        $this->factory = new TagsFactory();
     }
 
     public function test_create(): void
     {
-        $config = new ConfigDto();
+        $config = new Config();
         $config->setClass(get_class($this));
 
         $res = $this->factory->create($config);
 
-        $this->assertSame('FTagsTest', $res['event_name']);
+        $this->assertSame('TagsFactoryTest', $res['event_name']);
     }
 }

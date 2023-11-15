@@ -3,19 +3,18 @@
 namespace Tests\Unit\config;
 
 use bus\broker\BuryStrategy;
-use bus\config\FConfigDto;
+use bus\config\ConfigFactory;
 use bus\impl\TEventHandler;
 use Exception;
-use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 
-class FConfigDtoTest extends TestCase
+class ConfigFactoryTest extends TestCase
 {
-    private FConfigDto $factory;
+    private ConfigFactory $factory;
 
     public function setUp(): void
     {
-        $this->factory = new FConfigDto();
+        $this->factory = new ConfigFactory();
     }
 
     public function test_from_result(): void
@@ -61,9 +60,6 @@ class FConfigDtoTest extends TestCase
             'exceptions' => [
                 'fatal' => [
                     Exception::class,
-                ],
-                'repeatable' => [
-                    InvalidArgumentException::class
                 ],
             ],
         ];

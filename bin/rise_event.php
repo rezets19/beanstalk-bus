@@ -2,7 +2,7 @@
 
 use bus\config\Connection;
 use bus\config\Provider;
-use bus\factory\FTags;
+use bus\factory\TagsFactory;
 use bus\impl\ConsoleLogger;
 use bus\impl\NullAPMSender;
 use bus\impl\TEvent;
@@ -15,7 +15,7 @@ $messageBus =  new MessageBus(
     configProvider: new Provider(include __DIR__ . '/../src/impl/config.php'),
     logger: new ConsoleLogger(),
     apm: new NullAPMSender(),
-    fTags: new FTags()
+    fTags: new TagsFactory()
 );
 
 $messageBus->dispatch(new TEvent(1));

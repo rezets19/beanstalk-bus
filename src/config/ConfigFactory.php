@@ -2,11 +2,11 @@
 
 namespace bus\config;
 
-class FConfigDto
+class ConfigFactory
 {
-    public function fromResult(array $result, string $class): ConfigDto
+    public function fromResult(array $result, string $class): Config
     {
-        $dto = new ConfigDto();
+        $dto = new Config();
         $dto->setClass($class);
         $dto->setAsync((bool)$result['async']);
         $dto->setHandlers($result['handlers']);

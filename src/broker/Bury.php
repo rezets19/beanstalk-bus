@@ -8,7 +8,7 @@ use bus\broker\exception\BuryStrategyNotFoundException;
 use bus\broker\exception\NothingToDoException;
 use bus\config\ConfigNotFoundException;
 use bus\config\Provider;
-use bus\message\FQMessage;
+use bus\message\QMessageFactory;
 use Pheanstalk\Contract\PheanstalkManagerInterface;
 use Pheanstalk\Contract\PheanstalkSubscriberInterface;
 use Pheanstalk\Pheanstalk;
@@ -27,20 +27,14 @@ class Bury
 {
     private array $strategies;
 
-    private Provider $configProvider;
+    private QMessageFactory $factory;
 
-    private FQMessage $factory;
+    private BuryStrategyFactory $fBuryStrategy;
 
-    private LoggerInterface $logger;
-
-    private FBuryStrategy $fBuryStrategy;
-
-    public function __construct(Provider $configProvider, LoggerInterface $logger)
+    public function __construct(private Provider $configProvider, private LoggerInterface $logger)
     {
-        $this->factory = new FQMessage();
-        $this->configProvider = $configProvider;
-        $this->logger = $logger;
-        $this->fBuryStrategy = new FBuryStrategy($this->logger);
+        $this->factory = new QMessageFactory();
+        $this->fBuryStrategy = new BuryStrategyFactory($this->logger);
     }
 
     /**
