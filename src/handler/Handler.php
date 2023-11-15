@@ -1,6 +1,6 @@
 <?php
 
-namespace bus\common;
+namespace bus\handler;
 
 use Closure;
 use Psr\Log\LoggerInterface;
@@ -14,7 +14,7 @@ use ReflectionMethod;
  * Class Handler
  * @package bus
  */
-class Handler
+class Handler implements IHandler
 {
 
     public function __construct(private LoggerInterface $logger)
