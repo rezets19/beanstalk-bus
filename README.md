@@ -1,6 +1,6 @@
 # Beanstalk message bus
 
-Frameworks independent message bus library for beanstalkd.
+Frameworks independent message bus php 8.x library for beanstalkd.
 
 ## Create event and handler
 
@@ -12,4 +12,4 @@ Examples:
 ``php ./bin/listen.php``
 
 ## Rise event
-``php ./bin/add_event.php``
+``php ./bin/rise_event.php``
