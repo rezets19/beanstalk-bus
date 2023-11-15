@@ -2,7 +2,7 @@
 
 namespace bus\message;
 
-use bus\config\ConfigDto;
+use bus\config\Config;
 use bus\serializer\BodySerializer;
 use Exception;
 use JsonMapper\JsonMapperFactory;
@@ -11,7 +11,7 @@ use ReflectionClass;
 use ReflectionException;
 use function random_int;
 
-class FQMessage
+class QMessageFactory
 {
     private JsonMapperInterface $mapper;
 
@@ -56,11 +56,11 @@ class FQMessage
 
     /**
      * @param object $event
-     * @param ConfigDto $config
+     * @param Config $config
      * @return QMessage
      * @throws Exception
      */
-    public function create(object $event, ConfigDto $config): QMessage
+    public function create(object $event, Config $config): QMessage
     {
         $message = new QMessage($event, $this->serializer);
         $message->setUid((string)random_int(10000000, PHP_INT_MAX));
@@ -69,11 +69,11 @@ class FQMessage
     }
 
     /**
-     * @param ConfigDto $config
+     * @param Config $config
      * @param QMessage $message
      * @return QMessage
      */
-    public function fromConfig(ConfigDto $config, QMessage $message): QMessage
+    public function fromConfig(Config $config, QMessage $message): QMessage
     {
         if (null === $message->getDelay()) {
             $message->setDelay($config->getDelay());

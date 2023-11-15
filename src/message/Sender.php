@@ -2,8 +2,8 @@
 
 namespace bus\message;
 
-use bus\broker\FBroker;
-use bus\config\ConfigDto;
+use bus\broker\BrokerFactory;
+use bus\config\Config;
 use bus\config\Connection;
 use bus\exception\BrokerNotFoundException;
 use Pheanstalk\Pheanstalk;
@@ -12,27 +12,21 @@ use Pheanstalk\Values\TubeName;
 class Sender
 {
     /**
-     * @var FBroker
+     * @var BrokerFactory
      */
-    private FBroker $brokerFactory;
+    private BrokerFactory $brokerFactory;
 
-    /**
-     * @var Connection
-     */
-    private Connection $connection;
-
-    public function __construct(Connection $connection)
+    public function __construct(private Connection $connection)
     {
-        $this->connection = $connection;
     }
 
     /**
-     * @param ConfigDto $config
+     * @param Config $config
      * @param $message
      * @return void
      * @throws BrokerNotFoundException
      */
-    public function sendMessage(ConfigDto $config, QMessage $message): void
+    public function sendMessage(Config $config, QMessage $message): void
     {
         $broker = $this->getBrokerFactory()->get($config->getDriver());
 
@@ -45,9 +39,9 @@ class Sender
         );
     }
 
-    private function getBrokerFactory(): FBroker
+    private function getBrokerFactory(): BrokerFactory
     {
-        $this->brokerFactory = new FBroker($this->connection);
+        $this->brokerFactory = new BrokerFactory($this->connection);
 
         return $this->brokerFactory;
     }

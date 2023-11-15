@@ -3,13 +3,13 @@
 namespace bus;
 
 use bus\common\Handler;
-use bus\config\ConfigDto;
+use bus\config\Config;
 use bus\config\Connection;
 use bus\config\Provider;
 use bus\exception\BrokerNotFoundException;
-use bus\factory\FTags;
+use bus\factory\TagsFactory;
 use bus\interfaces\APMSenderInterface;
-use bus\message\FQMessage;
+use bus\message\QMessageFactory;
 use bus\message\QMessage;
 use bus\message\Sender;
 use Exception;
@@ -38,9 +38,9 @@ class MessageBus implements EventDispatcherInterface
     private Handler $handler;
 
     /**
-     * @var FQMessage
+     * @var QMessageFactory
      */
-    private FQMessage $messageFactory;
+    private QMessageFactory $messageFactory;
     /**
      * @var Connection
      */
@@ -61,18 +61,18 @@ class MessageBus implements EventDispatcherInterface
      */
     private APMSenderInterface $apm;
     /**
-     * @var FTags
+     * @var TagsFactory
      */
-    private FTags $fTags;
+    private TagsFactory $fTags;
 
-    public function __construct(Connection $connection, Provider $configProvider, LoggerInterface $logger, APMSenderInterface $apm, FTags $fTags)
+    public function __construct(Connection $connection, Provider $configProvider, LoggerInterface $logger, APMSenderInterface $apm, TagsFactory $fTags)
     {
         $this->connection = $connection;
         $this->configProvider = $configProvider;
         $this->logger = $logger;
         $this->apm = $apm;
         $this->fTags = $fTags;
-        $this->messageFactory = new FQMessage();
+        $this->messageFactory = new QMessageFactory();
 
         $this->sender = new Sender($this->connection);
         $this->handler = new Handler($this->logger);
@@ -119,12 +119,12 @@ class MessageBus implements EventDispatcherInterface
     }
 
     /**
-     * @param ConfigDto $config
+     * @param Config $config
      * @param QMessage $message
      * @return void
      * @throws BrokerNotFoundException
      */
-    public function sendMessage(ConfigDto $config, QMessage $message): void
+    public function sendMessage(Config $config, QMessage $message): void
     {
         $this->sender->sendMessage($config, $message);
     }

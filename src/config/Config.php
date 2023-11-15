@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace bus\config;
 
-class ConfigDto
+class Config
 {
     /**
      * There are sync events too

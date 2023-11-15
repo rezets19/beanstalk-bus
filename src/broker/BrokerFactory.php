@@ -15,17 +15,14 @@ use Pheanstalk\SocketFactory;
  * Class FBroker
  * @package bus
  */
-class FBroker
+class BrokerFactory
 {
     const DRIVER_BEANSTALK = 'beanstalk';
 
-    private config\Connection $connection;
-
     private static array $brokers = [];
 
-    public function __construct(config\Connection $connection)
+    public function __construct(private config\Connection $connection)
     {
-        $this->connection = $connection;
     }
 
     /**

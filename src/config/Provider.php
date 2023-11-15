@@ -6,25 +6,22 @@ use Psr\EventDispatcher\ListenerProviderInterface;
 
 class Provider implements ListenerProviderInterface
 {
-    private array $config;
-
     private array $cached = [];
 
-    public function __construct(array $config)
+    public function __construct(private array $config)
     {
-        $this->config = $config;
     }
 
     /**
      * @param string $class
-     * @return ConfigDto
+     * @return Config
      * @throws ConfigNotFoundException
      */
-    public function getByClass(string $class): ConfigDto
+    public function getByClass(string $class): Config
     {
         if (isset($this->config[$class])) {
             if (!isset($this->cached[$class])) {
-                $this->cached[$class] = (new FConfigDto())->fromResult($this->config[$class], $class);
+                $this->cached[$class] = (new ConfigFactory())->fromResult($this->config[$class], $class);
             }
 
             return $this->cached[$class];
@@ -35,10 +32,10 @@ class Provider implements ListenerProviderInterface
 
     /**
      * @param object $job
-     * @return ConfigDto
+     * @return Config
      * @throws ConfigNotFoundException
      */
-    public function getByJob(object $job): ConfigDto
+    public function getByJob(object $job): Config
     {
         return $this->getByClass(get_class($job));
     }
@@ -53,7 +50,7 @@ class Provider implements ListenerProviderInterface
         $class = get_class($event);
 
         if (isset($this->config[$class])) {
-            return (new FConfigDto())->fromResult($this->config[$class], $class)->getHandlers();
+            return (new ConfigFactory())->fromResult($this->config[$class], $class)->getHandlers();
         }
 
         throw new ConfigNotFoundException($class);

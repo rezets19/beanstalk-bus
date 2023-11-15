@@ -6,11 +6,8 @@ use Pheanstalk\Contract\JobIdInterface;
 
 class KickCommand implements ICommand
 {
-    private JobIdInterface $job;
-
-    public function __construct(JobIdInterface $job)
+    public function __construct(private JobIdInterface $job)
     {
-        $this->job = $job;
     }
 
     /**
