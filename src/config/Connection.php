@@ -4,18 +4,13 @@ namespace bus\config;
 
 class Connection
 {
-    private string $host;
-    private int $port;
-
     /**
      * Connection constructor.
      * @param string $host
      * @param int $port
      */
-    public function __construct(string $host, int $port = 11300)
+    public function __construct(private string $host, private int $port = 11300)
     {
-        $this->host = $host;
-        $this->port = $port;
     }
 
     /**

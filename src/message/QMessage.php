@@ -23,16 +23,6 @@ class QMessage implements Message, JsonSerializable
     private ?int $timeToRun = null;
 
     /**
-     * @var JsonSerializable
-     */
-    private JsonSerializable $job;
-
-    /**
-     * @var IBodySerializer
-     */
-    private IBodySerializer $serializer;
-
-    /**
      * @var int
      */
     private ?int $delay = null;
@@ -47,10 +37,8 @@ class QMessage implements Message, JsonSerializable
      */
     private ?string $queue = null;
 
-    public function __construct(JsonSerializable $job, IBodySerializer $serializer, array $properties = [], array $headers = [])
+    public function __construct(private JsonSerializable $job, private IBodySerializer $serializer, array $properties = [], array $headers = [])
     {
-        $this->job = $job;
-        $this->serializer = $serializer;
         $this->properties = $properties;
         $this->headers = $headers;
         $this->redelivered = false;

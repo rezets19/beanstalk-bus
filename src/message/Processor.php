@@ -20,9 +20,9 @@ use ReflectionException;
 class Processor
 {
     /**
-     * @var FQMessage
+     * @var QMessageFactory
      */
-    private FQMessage $factory;
+    private QMessageFactory $factory;
 
     /**
      * @var Provider
@@ -34,22 +34,10 @@ class Processor
      */
     private Handler $handler;
 
-    /**
-     * @var LoggerInterface
-     */
-    private LoggerInterface $logger;
-
-    /**
-     * @var MessageBus
-     */
-    private MessageBus $messageBus;
-
-    public function __construct(MessageBus $messageBus, LoggerInterface $logger)
+    public function __construct(private MessageBus $messageBus, private LoggerInterface $logger)
     {
-        $this->messageBus = $messageBus;
         $this->configProvider = $this->messageBus->getConfigProvider();
-        $this->factory = new FQMessage();
-        $this->logger = $logger;
+        $this->factory = new QMessageFactory();
         $this->handler = new Handler($this->logger);
     }
 

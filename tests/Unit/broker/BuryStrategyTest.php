@@ -6,7 +6,7 @@ use bus\broker\BuryStrategy;
 use bus\broker\commands\DeleteCommand;
 use bus\broker\commands\KickCommand;
 use bus\broker\exception\NothingToDoException;
-use bus\config\ConfigDto;
+use bus\config\Config;
 use Pheanstalk\Values\Job;
 use Pheanstalk\Values\JobId;
 use Pheanstalk\Values\JobState;
@@ -29,7 +29,7 @@ class BuryStrategyTest extends TestCase
 
         $stats = $this->getStats(1, 1);
 
-        $config = new ConfigDto();
+        $config = new Config();
         $config->setMaxAge(1);
         $config->setMaxKicks(2);
 
@@ -44,7 +44,7 @@ class BuryStrategyTest extends TestCase
 
         $stats = $this->getStats(1, 3);
 
-        $config = new ConfigDto();
+        $config = new Config();
         $config->setMaxAge(1);
         $config->setMaxKicks(2);
 
@@ -59,7 +59,7 @@ class BuryStrategyTest extends TestCase
 
         $stats = $this->getStats(1, 2);
 
-        $config = new ConfigDto();
+        $config = new Config();
         $config->setMaxAge(1);
         $config->setMaxKicks(2);
 
@@ -76,7 +76,7 @@ class BuryStrategyTest extends TestCase
 
         $stats = $this->getStats(0, 1);
 
-        $config = new ConfigDto();
+        $config = new Config();
         $config->setMaxAge(1);
         $config->setMaxKicks(2);
 

@@ -6,10 +6,10 @@ use bus\broker\Bury;
 use bus\broker\commands\DeleteCommand;
 use bus\broker\commands\KickCommand;
 use bus\broker\exception\NothingToDoException;
-use bus\broker\FBuryStrategy;
+use bus\broker\BuryStrategyFactory;
 use bus\broker\IBuryStrategy;
 use bus\config\Provider;
-use bus\message\FQMessage;
+use bus\message\QMessageFactory;
 use bus\message\QMessage;
 use bus\serializer\IBodySerializer;
 use JsonSerializable;
@@ -36,7 +36,7 @@ class BuryTest extends TestCase
 
 
     /**
-     * @var MockObject|FQMessage
+     * @var MockObject|QMessageFactory
      */
     private $factory;
 
@@ -46,7 +46,7 @@ class BuryTest extends TestCase
     private $serializer;
 
     /**
-     * @var MockObject|FBuryStrategy
+     * @var MockObject|BuryStrategyFactory
      */
     private $fBuryStrategy;
 
@@ -78,9 +78,9 @@ class BuryTest extends TestCase
         $this->manager = $this->createMock(PheanstalkManagerInterface::class);
         $this->subscriber = $this->createMock(PheanstalkSubscriberInterface::class);
 
-        $this->factory = $this->createMock(FQMessage::class);
+        $this->factory = $this->createMock(QMessageFactory::class);
         $this->serializer = $this->createMock(IBodySerializer::class);
-        $this->fBuryStrategy = $this->createMock(FBuryStrategy::class);
+        $this->fBuryStrategy = $this->createMock(BuryStrategyFactory::class);
         $this->iBuryStrategy = $this->createMock(IBuryStrategy::class);
         $this->responseInterface = $this->createMock(ResponseInterface::class);
 

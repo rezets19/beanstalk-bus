@@ -7,17 +7,14 @@ namespace bus\common;
  */
 class Restarter
 {
-    private string $tmpPath;
-
     private ?int $lastUpdate = null;
 
     private int $lastCheck;
 
     private int $timeout;
 
-    public function __construct(string $tmpPath)
+    public function __construct(private string $tmpPath)
     {
-        $this->tmpPath = $tmpPath;
         $this->lastCheck = time();
         $this->timeout = 10;
     }

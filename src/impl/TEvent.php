@@ -12,12 +12,8 @@ use JsonSerializable;
  */
 class TEvent implements JsonSerializable
 {
-    /** @var int */
-    private $id;
-
-    public function __construct(int $id)
+    public function __construct(private int $id)
     {
-        $this->id = $id;
     }
 
     /**
