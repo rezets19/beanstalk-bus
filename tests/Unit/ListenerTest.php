@@ -2,19 +2,16 @@
 
 namespace Tests\Unit;
 
-use bus\broker\Bury;
 use bus\broker\BrokerFactory;
+use bus\broker\Bury;
 use bus\common\Restarter;
 use bus\config\ConfigNotFoundException;
 use bus\consumer\Consumer;
 use bus\exception\BrokerNotFoundException;
 use bus\exception\HandlerNotFoundException;
-use bus\factory\TagsFactory;
 use bus\Listener;
 use Exception;
 use Pheanstalk\Pheanstalk;
-use Pheanstalk\Values\Job;
-use Pheanstalk\Values\JobId;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;

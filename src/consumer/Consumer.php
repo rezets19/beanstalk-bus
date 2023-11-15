@@ -33,7 +33,7 @@ class Consumer
         private QMessageFactory    $messageFactory,
         private Provider           $configProvider,
         private APMSenderInterface $apm,
-        private TagsFactory        $fTags,
+        private TagsFactory        $tagsFactory,
         private Processor          $processor,
         private Arrays             $arrays,
         private ExceptionsHandler  $exceptionsHandler
@@ -66,7 +66,7 @@ class Consumer
             $message = $this->messageFactory->fromString($job->getData());
             $config = $this->configProvider->getByJob($message->getJob());
 
-            $this->apm->metricIncrement(self::METRIC_JOB_PICK_CNT, $this->fTags->create($config));
+            $this->apm->metricIncrement(self::METRIC_JOB_PICK_CNT, $this->tagsFactory->create($config));
 
             $this->logger->notice(
                 'Consumed id=' . $job->getId() . ($config->isCritical() ? ', critical' : '')
@@ -79,7 +79,7 @@ class Consumer
             try {
                 $this->processor->process($message);
                 $broker->delete($job);
-                $this->apm->metricIncrement(self::METRIC_JOB_EXECUTE_CNT, $this->fTags->create($config));
+                $this->apm->metricIncrement(self::METRIC_JOB_EXECUTE_CNT, $this->tagsFactory->create($config));
             } catch (HandlerNotFoundException $e) {
                 $broker->delete($job);
                 $this->logger->notice($e->getMessage());
