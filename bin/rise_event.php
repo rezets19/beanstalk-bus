@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * php bin/rise_event.php -h 127.0.0.1 -p 11300 -f src/impl/config.php
+ */
+
+require __DIR__.'/../vendor/autoload.php';
+
 use bus\config\Connection;
 use bus\config\Provider;
 use bus\factory\TagsFactory;
@@ -9,11 +15,11 @@ use bus\impl\NullAPMSender;
 use bus\impl\TEvent;
 use bus\MessageBus;
 
-require __DIR__.'/../vendor/autoload.php';
+$options = getopt('h:p:f:');
 
 $messageBus =  new MessageBus(
-    connection: new Connection('127.0.0.1'),
-    configProvider: new Provider(include __DIR__ . '/../src/impl/config.php'),
+    connection: new Connection($options['h'] ?? '127.0.0.1', $options['p'] ?? 11300),
+    configProvider: new Provider(include $options['f']),
     logger: new ConsoleLogger(),
     apm: new NullAPMSender(),
     tagsFactory: new TagsFactory(),

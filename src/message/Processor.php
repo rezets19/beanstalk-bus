@@ -37,7 +37,6 @@ class Processor
     {
         $this->configProvider = $this->messageBus->getConfigProvider();
         $this->factory = new QMessageFactory();
-        //$this->handler = new Handler($this->logger);
     }
 
     /**
