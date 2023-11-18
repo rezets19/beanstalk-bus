@@ -17,3 +17,6 @@ Examples:
 
 ## Rise event
 ``php bin/rise_event.php -h 127.0.0.1 -p 11300 -f src/impl/config.php``
+
+## Laravel package
+https://github.com/rezets19/laravel-beanstalk-bus
