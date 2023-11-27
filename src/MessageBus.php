@@ -2,7 +2,6 @@
 
 namespace bus;
 
-use bus\config\Config;
 use bus\config\ConfigNotFoundException;
 use bus\config\Connection;
 use bus\config\Provider;
@@ -10,7 +9,6 @@ use bus\exception\BrokerNotFoundException;
 use bus\factory\TagsFactory;
 use bus\handler\IHandler;
 use bus\interfaces\APMSenderInterface;
-use bus\message\QMessage;
 use bus\message\QMessageFactory;
 use bus\message\Sender;
 use Psr\EventDispatcher\EventDispatcherInterface;
@@ -86,16 +84,5 @@ class MessageBus implements EventDispatcherInterface
         }
 
         return $job;
-    }
-
-    /**
-     * @param Config $config
-     * @param QMessage $message
-     * @return void
-     * @throws BrokerNotFoundException
-     */
-    public function sendMessage(Config $config, QMessage $message): void
-    {
-        $this->sender->sendMessage($config, $message);
     }
 }

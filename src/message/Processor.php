@@ -32,7 +32,8 @@ class Processor
     public function __construct(
         private MessageBus      $messageBus,
         private LoggerInterface $logger,
-        private IHandler        $handler
+        private IHandler        $handler,
+        private Sender          $sender
     )
     {
         $this->configProvider = $this->messageBus->getConfigProvider();
@@ -72,7 +73,7 @@ class Processor
                     $m->addHandler($item);
                     // First start with zero delay
                     $m->setDelay(0);
-                    $this->messageBus->sendMessage($config, $m);
+                    $this->sender->sendMessage($config, $m);
                 }
             } elseif (1 === count($configHandlers)) {
                 $this->handler->handle($message->getJob(), $configHandlers);
