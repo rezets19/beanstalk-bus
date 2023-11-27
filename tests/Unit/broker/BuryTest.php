@@ -34,38 +34,18 @@ class BuryTest extends TestCase
 
     private MockObject|LoggerInterface $logger;
 
+    private MockObject|QMessageFactory $factory;
 
-    /**
-     * @var MockObject|QMessageFactory
-     */
-    private $factory;
+    private MockObject|IBodySerializer $serializer;
 
-    /**
-     * @var MockObject|IBodySerializer
-     */
-    private $serializer;
+    private MockObject|BuryStrategyFactory $fBuryStrategy;
 
-    /**
-     * @var MockObject|BuryStrategyFactory
-     */
-    private $fBuryStrategy;
+    private MockObject|IBuryStrategy $iBuryStrategy;
 
-    /**
-     * @var MockObject|IBuryStrategy
-     */
-    private $iBuryStrategy;
+    private MockObject|ResponseInterface $responseInterface;
 
-    /**
-     * @var MockObject|ResponseInterface
-     */
-    private $responseInterface;
-    /**
-     * @var PheanstalkManagerInterface|(PheanstalkManagerInterface&MockObject)|MockObject
-     */
     private MockObject|PheanstalkManagerInterface $manager;
-    /**
-     * @var PheanstalkSubscriberInterface|(PheanstalkSubscriberInterface&MockObject)|MockObject
-     */
+
     private MockObject|PheanstalkSubscriberInterface $subscriber;
 
     protected function setUp(): void
@@ -95,7 +75,7 @@ class BuryTest extends TestCase
         $job = new Job(new JobId(1), 'data');
 
         $message = new QMessage($this->createMock(JsonSerializable::class), $this->serializer);
-        $command = new KickCommand($job);
+        $command = new KickCommand($job, 'reason');
 
         $this->manager->expects(self::once())->method('statsJob');
         $this->manager->expects(self::once())->method('kickJob')->with($command->getJob());
@@ -110,7 +90,7 @@ class BuryTest extends TestCase
     {
         $job = new Job(new JobId(1), 'data');
         $message = new QMessage($this->createMock(JsonSerializable::class), $this->serializer);
-        $command = new DeleteCommand($job);
+        $command = new DeleteCommand($job, 'reason');
 
         $this->manager->expects(self::once())->method('statsJob')->with($job);
         $this->subscriber->expects(self::once())->method('delete')->with($command->getJob());
@@ -127,7 +107,7 @@ class BuryTest extends TestCase
 
         $job = new Job(new JobId(1), 'data');
         $message = new QMessage($this->createMock(JsonSerializable::class), $this->serializer);
-        $command = new DeleteCommand($job);
+        $command = new DeleteCommand($job, 'reason');
 
         $this->manager->expects(self::once())->method('statsJob')->with($job);
         $this->manager->expects(self::never())->method('kickJob')->with($command->getJob());

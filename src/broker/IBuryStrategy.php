@@ -16,5 +16,5 @@ interface IBuryStrategy
      * @return ICommand
      * @throws NothingToDoException
      */
-    public function check(JobIdInterface $job, JobStats $stats, Config $config): ICommand;
+    public function check(JobIdInterface $job, JobStats $jobStats, Config $config): ICommand;
 }

@@ -13,6 +13,7 @@ use Pheanstalk\Contract\PheanstalkManagerInterface;
 use Pheanstalk\Contract\PheanstalkSubscriberInterface;
 use Pheanstalk\Pheanstalk;
 use Pheanstalk\Values\Job;
+use Pheanstalk\Values\JobStats;
 use Psr\Log\LoggerInterface;
 use ReflectionException;
 use Throwable;
@@ -66,21 +67,36 @@ class Bury
      */
     public function consume(Job $job, PheanstalkManagerInterface $manager, PheanstalkSubscriberInterface $subscriber): void
     {
-        $stats = $manager->statsJob($job);
+        /** @var JobStats $jobStats */
+        $jobStats = $manager->statsJob($job);
 
         $message = $this->factory->fromString($job->getData());
         $config = $this->configProvider->getByJob($message->getJob());
 
-        $command = $this->getStrategy($config->getBuryStrategy())->check($job, $stats, $config);
+        $command = $this->getStrategy($config->getBuryStrategy())->check($job, $jobStats, $config);
 
         if ($command instanceof KickCommand) {
             $manager->kickJob($command->getJob());
-            $this->notice('Kicked id=' . $job->getId() . ' queue=' . $config->getQueue());
+            $this->notice(
+                sprintf(
+                    'Kicked id=%s queue=%s reason=%s',
+                    $job->getId(),
+                    $config->getQueue(),
+                    $command->getReason()
+                )
+            );
         }
 
         if ($command instanceof DeleteCommand) {
             $subscriber->delete($command->getJob());
-            $this->notice('Deleted id=' . $job->getId() . ' queue=' . $config->getQueue());
+            $this->notice(
+                sprintf(
+                    'Deleted id=%s queue=%s reason=%s',
+                    $job->getId(),
+                    $config->getQueue(),
+                    $command->getReason()
+                )
+            );
         }
     }
 
