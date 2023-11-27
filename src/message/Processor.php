@@ -2,14 +2,14 @@
 
 namespace bus\message;
 
-use bus\config;
+use bus\config\ConfigNotFoundException;
 use bus\config\Provider;
-use bus\exception;
+use bus\exception\BrokerNotFoundException;
 use bus\exception\HandlerNotFoundException;
 use bus\handler\IHandler;
 use bus\MessageBus;
+use Pheanstalk\Exception\NoImplementationException;
 use Psr\Log\LoggerInterface;
-use ReflectionException;
 
 /**
  * AMQP message processor
@@ -43,10 +43,10 @@ class Processor
     /**
      * @param QMessage $message
      * @return QMessage
-     * @throws config\ConfigNotFoundException
+     * @throws BrokerNotFoundException
+     * @throws ConfigNotFoundException
      * @throws HandlerNotFoundException
-     * @throws exception\BrokerNotFoundException
-     * @throws ReflectionException
+     * @throws NoImplementationException
      */
     public function process(QMessage $message): QMessage
     {
