@@ -1,7 +1,7 @@
 # Beanstalk message bus
 
 Frameworks independent message bus php 8.x library for beanstalkd.  
-Beanstalkd is a zero management simple amqp server.   
+Beanstalkd is a zero management message broker, work queue.   
 
 ## Install
 ```sh 
