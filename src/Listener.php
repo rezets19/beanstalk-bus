@@ -11,7 +11,9 @@ use bus\exception\BrokerNotFoundException;
 use bus\exception\HandlerNotFoundException;
 use Exception;
 use InvalidArgumentException;
-use Pheanstalk\Pheanstalk;
+use Pheanstalk\Contract\PheanstalkManagerInterface;
+use Pheanstalk\Contract\PheanstalkPublisherInterface;
+use Pheanstalk\Contract\PheanstalkSubscriberInterface;
 use Pheanstalk\Values\TubeName;
 use Psr\Log\LoggerInterface;
 use ReflectionException;
@@ -19,9 +21,6 @@ use Throwable;
 
 /**
  * Main background process
- *
- * Class Listener
- * @package bus
  */
 class Listener
 {
@@ -55,14 +54,13 @@ class Listener
     }
 
     /**
-     * @param Pheanstalk $broker
      * @throws HandlerNotFoundException
      * @throws Throwable
      * @throws ReflectionException
      * @throws ConfigNotFoundException
      * @throws BrokerNotFoundException
      */
-    public function consume(Pheanstalk $broker): void
+    public function consume(PheanstalkManagerInterface|PheanstalkPublisherInterface|PheanstalkSubscriberInterface $broker): void
     {
         if ($this->restarter->restart()) {
             $this->logger->notice('Restart attempt received, shutting down');

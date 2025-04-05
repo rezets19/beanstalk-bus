@@ -3,15 +3,15 @@
 namespace Tests\Unit\broker;
 
 use bus\broker\Bury;
-use bus\broker\commands\DeleteCommand;
-use bus\broker\commands\KickCommand;
+use bus\broker\commands\DeleteCommandInterface;
+use bus\broker\commands\KickCommandInterface;
 use bus\broker\exception\NothingToDoException;
 use bus\broker\BuryStrategyFactory;
-use bus\broker\IBuryStrategy;
+use bus\broker\BuryStrategyInterface;
 use bus\config\Provider;
 use bus\message\QMessageFactory;
 use bus\message\QMessage;
-use bus\serializer\IBodySerializer;
+use bus\serializer\BodySerializerInterface;
 use JsonSerializable;
 use Pheanstalk\Contract\PheanstalkManagerInterface;
 use Pheanstalk\Contract\PheanstalkSubscriberInterface;
@@ -36,11 +36,11 @@ class BuryTest extends TestCase
 
     private MockObject|QMessageFactory $factory;
 
-    private MockObject|IBodySerializer $serializer;
+    private MockObject|BodySerializerInterface $serializer;
 
     private MockObject|BuryStrategyFactory $fBuryStrategy;
 
-    private MockObject|IBuryStrategy $iBuryStrategy;
+    private MockObject|BuryStrategyInterface $iBuryStrategy;
 
     private MockObject|ResponseInterface $responseInterface;
 
@@ -59,9 +59,9 @@ class BuryTest extends TestCase
         $this->subscriber = $this->createMock(PheanstalkSubscriberInterface::class);
 
         $this->factory = $this->createMock(QMessageFactory::class);
-        $this->serializer = $this->createMock(IBodySerializer::class);
+        $this->serializer = $this->createMock(BodySerializerInterface::class);
         $this->fBuryStrategy = $this->createMock(BuryStrategyFactory::class);
-        $this->iBuryStrategy = $this->createMock(IBuryStrategy::class);
+        $this->iBuryStrategy = $this->createMock(BuryStrategyInterface::class);
         $this->responseInterface = $this->createMock(ResponseInterface::class);
 
         $this->checker = new Bury($this->configProvider, $this->logger);
@@ -75,7 +75,7 @@ class BuryTest extends TestCase
         $job = new Job(new JobId(1), 'data');
 
         $message = new QMessage($this->createMock(JsonSerializable::class), $this->serializer);
-        $command = new KickCommand($job, 'reason');
+        $command = new KickCommandInterface($job, 'reason');
 
         $this->manager->expects(self::once())->method('statsJob');
         $this->manager->expects(self::once())->method('kickJob')->with($command->getJob());
@@ -90,7 +90,7 @@ class BuryTest extends TestCase
     {
         $job = new Job(new JobId(1), 'data');
         $message = new QMessage($this->createMock(JsonSerializable::class), $this->serializer);
-        $command = new DeleteCommand($job, 'reason');
+        $command = new DeleteCommandInterface($job, 'reason');
 
         $this->manager->expects(self::once())->method('statsJob')->with($job);
         $this->subscriber->expects(self::once())->method('delete')->with($command->getJob());
@@ -107,7 +107,7 @@ class BuryTest extends TestCase
 
         $job = new Job(new JobId(1), 'data');
         $message = new QMessage($this->createMock(JsonSerializable::class), $this->serializer);
-        $command = new DeleteCommand($job, 'reason');
+        $command = new DeleteCommandInterface($job, 'reason');
 
         $this->manager->expects(self::once())->method('statsJob')->with($job);
         $this->manager->expects(self::never())->method('kickJob')->with($command->getJob());

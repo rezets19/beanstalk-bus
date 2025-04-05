@@ -16,7 +16,7 @@ Examples:
 
 ## Start listener
 ```sh
-php bin/listen.php -h 127.0.0.1 -p 11300 -q test -t /tmp/bus -f src/impl/config.php  
+php bin/listen.php -h 127.0.0.1 -p 11300 -q test -t /tmp -f src/impl/config.php  
 ```
 
 ## Rise event

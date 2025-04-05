@@ -3,8 +3,8 @@
 namespace Tests\Unit\broker;
 
 use bus\broker\BuryStrategy;
-use bus\broker\commands\DeleteCommand;
-use bus\broker\commands\KickCommand;
+use bus\broker\commands\DeleteCommandInterface;
+use bus\broker\commands\KickCommandInterface;
 use bus\broker\exception\NothingToDoException;
 use bus\config\Config;
 use Pheanstalk\Values\Job;
@@ -35,7 +35,7 @@ class BuryStrategyTest extends TestCase
 
         $command = $this->strategy->check($job, $stats, $config);
 
-        $this->assertInstanceOf(KickCommand::class, $command);
+        $this->assertInstanceOf(KickCommandInterface::class, $command);
     }
 
     public function testDelete(): void
@@ -50,7 +50,7 @@ class BuryStrategyTest extends TestCase
 
         $command = $this->strategy->check($job, $stats, $config);
 
-        $this->assertInstanceOf(DeleteCommand::class, $command);
+        $this->assertInstanceOf(DeleteCommandInterface::class, $command);
     }
 
     public function testDelete2(): void
@@ -65,7 +65,7 @@ class BuryStrategyTest extends TestCase
 
         $command = $this->strategy->check($job, $stats, $config);
 
-        $this->assertInstanceOf(DeleteCommand::class, $command);
+        $this->assertInstanceOf(DeleteCommandInterface::class, $command);
     }
 
     public function testNothingToDO(): void

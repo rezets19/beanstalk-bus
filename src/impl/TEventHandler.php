@@ -4,9 +4,6 @@ namespace bus\impl;
 
 /**
  * Event handler example
- *
- * Class TEventHandler
- * @package bus\impl
  */
 class TEventHandler
 {

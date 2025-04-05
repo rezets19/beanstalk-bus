@@ -7,7 +7,7 @@ use bus\config\Connection;
 use bus\config\Provider;
 use bus\exception\BrokerNotFoundException;
 use bus\factory\TagsFactory;
-use bus\handler\IHandler;
+use bus\handler\HandlerInterface;
 use bus\interfaces\APMSenderInterface;
 use bus\message\QMessageFactory;
 use bus\message\Sender;
@@ -17,9 +17,6 @@ use Psr\Log\LoggerInterface;
 
 /**
  * Main class to handle events and commands
- *
- * Class MessageBus
- * @package bus
  */
 class MessageBus implements EventDispatcherInterface
 {
@@ -41,24 +38,18 @@ class MessageBus implements EventDispatcherInterface
         private LoggerInterface    $logger,
         private APMSenderInterface $apm,
         private TagsFactory        $tagsFactory,
-        private IHandler           $handler
+        private HandlerInterface $handler
     )
     {
         $this->messageFactory = new QMessageFactory();
         $this->sender = new Sender($this->connection);
     }
 
-    /**
-     * @return Provider
-     */
     public function getConfigProvider(): Provider
     {
         return $this->configProvider;
     }
 
-    /**
-     * @return Connection
-     */
     public function getConnection(): Connection
     {
         return $this->connection;

@@ -6,11 +6,8 @@ use JsonSerializable;
 
 /**
  * Serialize event into special array
- *
- * Class BodySerializer
- * @package bus\serializer
  */
-class BodySerializer implements IBodySerializer
+class BodySerializer implements BodySerializerInterface
 {
     public function toJson(JsonSerializable $target): string
     {
