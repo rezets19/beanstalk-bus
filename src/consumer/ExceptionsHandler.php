@@ -6,7 +6,9 @@ use bus\config\Config;
 use bus\factory\TagsFactory;
 use bus\interfaces\APMSenderInterface;
 use Pheanstalk\Contract\JobIdInterface;
+use Pheanstalk\Contract\PheanstalkManagerInterface;
 use Pheanstalk\Contract\PheanstalkSubscriberInterface;
+use Pheanstalk\Exception\JobNotFoundException;
 use Pheanstalk\Values\JobState;
 use Pheanstalk\Values\JobStats;
 use Psr\Log\LoggerInterface;
@@ -23,20 +25,16 @@ class ExceptionsHandler
     }
 
     /**
-     * @param Throwable $t
-     * @param JobStats $jobStats
-     * @param PheanstalkSubscriberInterface $broker
-     * @param JobIdInterface $job
-     * @param Config $config
-     * @return void
+     * Don't forget that $statsJob and PheanstalkManagerInterface::statsJob differs
+     *
      * @throws Throwable
      */
     public function handle(
-        Throwable                     $t,
-        JobStats                      $jobStats,
-        PheanstalkSubscriberInterface $broker,
-        JobIdInterface                $job,
-        Config                        $config
+        Throwable                                                $t,
+        JobStats                                                 $jobStats,
+        PheanstalkSubscriberInterface|PheanstalkManagerInterface $broker,
+        JobIdInterface                                           $job,
+        Config                                                   $config
     ): void
     {
         $this->logger->notice($t->getMessage());
@@ -49,14 +47,20 @@ class ExceptionsHandler
         }
 
         if ($jobStats->reserves >= $config->getMaxRetry() + 1) {
-            if (JobState::BURIED !== $jobStats->state) {
-                $broker->bury($job);
-                $this->apm->metricIncrement(Consumer::METRIC_JOB_BURY_CNT, $this->fTags->create($config));
-            }
+            try {
+                if (JobState::BURIED !== $broker->statsJob($job)->state) {
+                    $broker->bury($job);
+                    $this->apm->metricIncrement(Consumer::METRIC_JOB_BURY_CNT, $this->fTags->create($config));
+                }
 
-            $this->logger->notice('Buried id=' . $job->getId());
+                $this->logger->notice('Buried id=' . $job->getId());
+            } catch (JobNotFoundException $e) {
+                $this->logger->error(
+                    sprintf('Job not found id=%s, state=%s', $job->getId(), $broker->statsJob($job)->state->value)
+                );
+            }
         } else {
-            if (JobState::BURIED !== $jobStats->state) {
+            if (JobState::BURIED !== $broker->statsJob($job)->state) {
                 $broker->release($job, $config->getPriority(), $config->getDelay());
                 $this->logger->notice('Repeated id=' . $job->getId() . ', reserves=' . $jobStats->reserves);
                 $this->apm->metricIncrement(Consumer::METRIC_JOB_RELEASE_CNT, $this->fTags->create($config));
