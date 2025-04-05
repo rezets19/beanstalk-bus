@@ -26,19 +26,19 @@ class BuryStrategy implements IBuryStrategy
      * Handle buried jobs
      *
      * @param JobIdInterface $job
-     * @param JobStats $stats
+     * @param JobStats $jobStats
      * @param Config $config
      * @return ICommand
      * @throws NothingToDoException
      */
-    public function check(JobIdInterface $job, JobStats $stats, Config $config): ICommand
+    public function check(JobIdInterface $job, JobStats $jobStats, Config $config): ICommand
     {
-        if ($stats->age >= $config->getMaxAge() && $stats->kicks < $config->getMaxKicks()) {
+        if ($jobStats->age >= $config->getMaxAge() && $jobStats->kicks < $config->getMaxKicks()) {
             // Return job into ready state
-            return new KickCommand($job);
-        } else if ($stats->kicks >= $config->getMaxKicks()) {
+            return new KickCommand($job, sprintf('Job pause timeout reached, to wait: %s, time: %s', $config->getMaxAge(), $jobStats->age));
+        } else if ($jobStats->kicks >= $config->getMaxKicks()) {
             // We don't want to keep it anymore
-            return new DeleteCommand($job);
+            return new DeleteCommand($job, sprintf('Max kicks reached: max: %s, total: %s', $config->getMaxKicks(), $jobStats->kicks));
         } else {
             // Job is not ready to be kicked or deleted
             throw new NothingToDoException('Job id=' . $job->getId());

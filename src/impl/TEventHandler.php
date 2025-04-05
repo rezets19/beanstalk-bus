@@ -12,11 +12,11 @@ class TEventHandler
 {
     public function handle(TEvent $event)
     {
-        throw new \Exception('Some error in handle');
+        throw new \Exception('Fatal error in handler, do not repeat the job.');
     }
 
     public function handle2(TEvent $event)
     {
-        throw new \InvalidArgumentException('Error #2');
+        throw new \InvalidArgumentException('Non fatal error in handler #2, repeat.');
     }
 }

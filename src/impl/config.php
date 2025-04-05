@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * \bus\config\Config - options description
+ */
+
 use bus\broker\BuryStrategy;
 use bus\impl\TEvent;
 use bus\impl\TEventHandler;
@@ -14,7 +18,7 @@ return [
             'ttr' => 60,
             'maxAge' => 60,
             'maxKicks' => 3,
-            'maxRetry' => 0,
+            'maxRetry' => 1,
             'buryStrategy' => BuryStrategy::class,
         ],
         'handlers' => [

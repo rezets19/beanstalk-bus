@@ -6,7 +6,7 @@ use bus\broker\BrokerFactory;
 use bus\config\Config;
 use bus\config\Connection;
 use bus\exception\BrokerNotFoundException;
-use Pheanstalk\Pheanstalk;
+use Pheanstalk\Exception\NoImplementationException;
 use Pheanstalk\Values\TubeName;
 
 class Sender
@@ -18,17 +18,19 @@ class Sender
 
     public function __construct(private Connection $connection)
     {
+        $this->brokerFactory = new BrokerFactory($this->connection);
     }
 
     /**
      * @param Config $config
-     * @param $message
+     * @param QMessage $message
      * @return void
      * @throws BrokerNotFoundException
+     * @throws NoImplementationException
      */
     public function sendMessage(Config $config, QMessage $message): void
     {
-        $broker = $this->getBrokerFactory()->get($config->getDriver());
+        $broker = $this->brokerFactory->get($config->getDriver());
 
         $broker->useTube(new TubeName($message->getQueue()));
         $broker->put(
@@ -37,12 +39,5 @@ class Sender
             $message->getDelay(),
             $message->getTimeToRun()
         );
-    }
-
-    private function getBrokerFactory(): BrokerFactory
-    {
-        $this->brokerFactory = new BrokerFactory($this->connection);
-
-        return $this->brokerFactory;
     }
 }

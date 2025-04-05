@@ -2,14 +2,14 @@
 
 namespace bus\message;
 
-use bus\config;
+use bus\config\ConfigNotFoundException;
 use bus\config\Provider;
-use bus\exception;
+use bus\exception\BrokerNotFoundException;
 use bus\exception\HandlerNotFoundException;
 use bus\handler\IHandler;
 use bus\MessageBus;
+use Pheanstalk\Exception\NoImplementationException;
 use Psr\Log\LoggerInterface;
-use ReflectionException;
 
 /**
  * AMQP message processor
@@ -32,7 +32,8 @@ class Processor
     public function __construct(
         private MessageBus      $messageBus,
         private LoggerInterface $logger,
-        private IHandler        $handler
+        private IHandler        $handler,
+        private Sender          $sender
     )
     {
         $this->configProvider = $this->messageBus->getConfigProvider();
@@ -42,10 +43,10 @@ class Processor
     /**
      * @param QMessage $message
      * @return QMessage
-     * @throws config\ConfigNotFoundException
+     * @throws BrokerNotFoundException
+     * @throws ConfigNotFoundException
      * @throws HandlerNotFoundException
-     * @throws exception\BrokerNotFoundException
-     * @throws ReflectionException
+     * @throws NoImplementationException
      */
     public function process(QMessage $message): QMessage
     {
@@ -72,7 +73,7 @@ class Processor
                     $m->addHandler($item);
                     // First start with zero delay
                     $m->setDelay(0);
-                    $this->messageBus->sendMessage($config, $m);
+                    $this->sender->sendMessage($config, $m);
                 }
             } elseif (1 === count($configHandlers)) {
                 $this->handler->handle($message->getJob(), $configHandlers);

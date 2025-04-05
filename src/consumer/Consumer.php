@@ -69,7 +69,7 @@ class Consumer
             $this->apm->metricIncrement(self::METRIC_JOB_PICK_CNT, $this->tagsFactory->create($config));
 
             $this->logger->notice(
-                'Consumed id=' . $job->getId() . ($config->isCritical() ? ', critical' : '')
+                sprintf('Consumed id=%s %s', $job->getId(), ($config->isCritical() ? ', critical' : ''))
             );
 
             if ($config->isCritical()) {
@@ -86,6 +86,7 @@ class Consumer
             } catch (Throwable $t) {
                 if ($this->arrays->classExist($t, $config->getFatal())) {
                     $broker->delete($job);
+                    $this->logger->notice(sprintf('Fatal error, job deleted=%s', $job->getId()));
                     $this->logger->notice($t->getMessage());
 
                     return;

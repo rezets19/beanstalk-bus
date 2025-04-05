@@ -159,7 +159,7 @@ class Config
 
     public function getMaxRetry(): int
     {
-        return (int)$this->maxRetry;
+        return $this->maxRetry;
     }
 
     /**
@@ -168,7 +168,7 @@ class Config
      */
     public function isCritical(): bool
     {
-        return $this->getMaxRetry() < 1;
+        return $this->getMaxRetry() === 0;
     }
 
     public function getMaxAge(): int
