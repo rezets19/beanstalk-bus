@@ -8,7 +8,7 @@ use bus\common\Arrays;
 use bus\common\Restarter;
 use bus\consumer\Consumer;
 use bus\consumer\ExceptionsHandler;
-use bus\handler\IHandler;
+use bus\handler\HandlerInterface;
 use bus\interfaces\APMSenderInterface;
 use bus\Listener;
 use bus\message\Processor;
@@ -25,7 +25,7 @@ class ListenerFactory
         MessageBus         $messageBus,
         LoggerInterface    $logger,
         APMSenderInterface $apm,
-        IHandler           $handler
+        HandlerInterface   $handler
     ): Listener
     {
         return new Listener(

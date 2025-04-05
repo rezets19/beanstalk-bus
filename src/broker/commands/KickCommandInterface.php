@@ -4,7 +4,7 @@ namespace bus\broker\commands;
 
 use Pheanstalk\Contract\JobIdInterface;
 
-class KickCommand implements ICommand
+class KickCommandInterface implements CommandInterface
 {
     public function __construct(private JobIdInterface $job, private string $reason)
     {

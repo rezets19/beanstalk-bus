@@ -2,16 +2,13 @@
 
 namespace bus\message;
 
-use bus\serializer\IBodySerializer;
+use bus\serializer\BodySerializerInterface;
 use Interop\Queue\Impl\MessageTrait;
 use Interop\Queue\Message;
 use JsonSerializable;
 
 /**
  * Envelope for event or command
- *
- * Class QMessage
- * @package bus\message
  */
 class QMessage implements Message, JsonSerializable
 {
@@ -37,7 +34,7 @@ class QMessage implements Message, JsonSerializable
      */
     private ?string $queue = null;
 
-    public function __construct(private JsonSerializable $job, private IBodySerializer $serializer, array $properties = [], array $headers = [])
+    public function __construct(private JsonSerializable $job, private BodySerializerInterface $serializer, array $properties = [], array $headers = [])
     {
         $this->properties = $properties;
         $this->headers = $headers;

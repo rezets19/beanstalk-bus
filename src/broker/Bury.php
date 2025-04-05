@@ -2,16 +2,16 @@
 
 namespace bus\broker;
 
-use bus\broker\commands\DeleteCommand;
-use bus\broker\commands\KickCommand;
+use bus\broker\commands\DeleteCommandInterface;
+use bus\broker\commands\KickCommandInterface;
 use bus\broker\exception\BuryStrategyNotFoundException;
 use bus\broker\exception\NothingToDoException;
 use bus\config\ConfigNotFoundException;
 use bus\config\Provider;
 use bus\message\QMessageFactory;
 use Pheanstalk\Contract\PheanstalkManagerInterface;
+use Pheanstalk\Contract\PheanstalkPublisherInterface;
 use Pheanstalk\Contract\PheanstalkSubscriberInterface;
-use Pheanstalk\Pheanstalk;
 use Pheanstalk\Values\Job;
 use Pheanstalk\Values\JobStats;
 use Psr\Log\LoggerInterface;
@@ -20,9 +20,6 @@ use Throwable;
 
 /**
  * Handle buried jobs - kick, delete or do nothing
- *
- * Class BuryChecker
- * @package bus\broker
  */
 class Bury
 {
@@ -35,13 +32,10 @@ class Bury
     public function __construct(private Provider $configProvider, private LoggerInterface $logger)
     {
         $this->factory = new QMessageFactory();
-        $this->fBuryStrategy = new BuryStrategyFactory($this->logger);
+        $this->fBuryStrategy = new BuryStrategyFactory();
     }
 
-    /**
-     * @param Pheanstalk $broker
-     */
-    public function check(Pheanstalk $broker): void
+    public function check(PheanstalkManagerInterface|PheanstalkPublisherInterface|PheanstalkSubscriberInterface $broker): void
     {
         try {
             while (($job = $broker->peekBuried()) instanceof Job) {
@@ -75,7 +69,7 @@ class Bury
 
         $command = $this->getStrategy($config->getBuryStrategy())->check($job, $jobStats, $config);
 
-        if ($command instanceof KickCommand) {
+        if ($command instanceof KickCommandInterface) {
             $manager->kickJob($command->getJob());
             $this->notice(
                 sprintf(
@@ -87,7 +81,7 @@ class Bury
             );
         }
 
-        if ($command instanceof DeleteCommand) {
+        if ($command instanceof DeleteCommandInterface) {
             $subscriber->delete($command->getJob());
             $this->notice(
                 sprintf(
@@ -102,10 +96,10 @@ class Bury
 
     /**
      * @param string $class
-     * @return IBuryStrategy
+     * @return BuryStrategyInterface
      * @throws BuryStrategyNotFoundException
      */
-    private function getStrategy(string $class): IBuryStrategy
+    private function getStrategy(string $class): BuryStrategyInterface
     {
         if (!isset($this->strategies[$class])) {
             $this->strategies[$class] = $this->fBuryStrategy->create($class);

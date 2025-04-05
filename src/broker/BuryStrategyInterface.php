@@ -2,19 +2,20 @@
 
 namespace bus\broker;
 
-use bus\broker\commands\ICommand;
+use bus\broker\commands\CommandInterface;
 use bus\broker\exception\NothingToDoException;
 use bus\config\Config;
 use Pheanstalk\Contract\JobIdInterface;
 use Pheanstalk\Values\JobStats;
 
-interface IBuryStrategy
+interface BuryStrategyInterface
 {
     /**
      * @param JobIdInterface $job
+     * @param JobStats $jobStats
      * @param Config $config
-     * @return ICommand
+     * @return CommandInterface
      * @throws NothingToDoException
      */
-    public function check(JobIdInterface $job, JobStats $jobStats, Config $config): ICommand;
+    public function check(JobIdInterface $job, JobStats $jobStats, Config $config): CommandInterface;
 }

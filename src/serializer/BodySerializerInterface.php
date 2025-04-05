@@ -4,7 +4,7 @@ namespace bus\serializer;
 
 use JsonSerializable;
 
-interface IBodySerializer
+interface BodySerializerInterface
 {
     public function toJson(JsonSerializable $target) : string;
 }

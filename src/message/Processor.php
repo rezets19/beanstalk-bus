@@ -6,16 +6,13 @@ use bus\config\ConfigNotFoundException;
 use bus\config\Provider;
 use bus\exception\BrokerNotFoundException;
 use bus\exception\HandlerNotFoundException;
-use bus\handler\IHandler;
+use bus\handler\HandlerInterface;
 use bus\MessageBus;
 use Pheanstalk\Exception\NoImplementationException;
 use Psr\Log\LoggerInterface;
 
 /**
- * AMQP message processor
- *
- * Class Processor
- * @package bus
+ * Message processor
  */
 class Processor
 {
@@ -30,10 +27,10 @@ class Processor
     private Provider $configProvider;
 
     public function __construct(
-        private MessageBus      $messageBus,
-        private LoggerInterface $logger,
-        private IHandler        $handler,
-        private Sender          $sender
+        private MessageBus       $messageBus,
+        private LoggerInterface  $logger,
+        private HandlerInterface $handler,
+        private Sender           $sender
     )
     {
         $this->configProvider = $this->messageBus->getConfigProvider();

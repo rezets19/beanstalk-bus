@@ -21,7 +21,7 @@ class Provider implements ListenerProviderInterface
     {
         if (isset($this->config[$class])) {
             if (!isset($this->cached[$class])) {
-                $this->cached[$class] = (new ConfigFactory())->fromResult($this->config[$class], $class);
+                $this->cached[$class] = (new ConfigFactory())->create($this->config[$class], $class);
             }
 
             return $this->cached[$class];
@@ -50,7 +50,7 @@ class Provider implements ListenerProviderInterface
         $class = get_class($event);
 
         if (isset($this->config[$class])) {
-            return (new ConfigFactory())->fromResult($this->config[$class], $class)->getHandlers();
+            return (new ConfigFactory())->create($this->config[$class], $class)->getHandlers();
         }
 
         throw new ConfigNotFoundException($class);

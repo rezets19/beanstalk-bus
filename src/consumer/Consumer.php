@@ -11,6 +11,9 @@ use bus\factory\TagsFactory;
 use bus\interfaces\APMSenderInterface;
 use bus\message\QMessageFactory;
 use bus\message\Processor;
+use Pheanstalk\Contract\PheanstalkManagerInterface;
+use Pheanstalk\Contract\PheanstalkPublisherInterface;
+use Pheanstalk\Contract\PheanstalkSubscriberInterface;
 use Pheanstalk\Exception\DeadlineSoonException;
 use Pheanstalk\Pheanstalk;
 use Psr\Log\LoggerInterface;
@@ -51,10 +54,12 @@ class Consumer
      * @throws ConfigNotFoundException
      * @throws BrokerNotFoundException
      */
-    public function consume(string $queueName, Pheanstalk $broker): void
-    {
+    public function consume(
+        string $queueName,
+        PheanstalkManagerInterface|PheanstalkPublisherInterface|PheanstalkSubscriberInterface $broker
+    ): void {
         try {
-            $this->logger->notice('Watching tube=' . $queueName);
+            $this->logger->notice(sprintf('Watching tube=%s', $queueName));
 
             $job = $broker->reserveWithTimeout(self::RESERVE_TIMEOUT);
 
@@ -96,7 +101,7 @@ class Consumer
             }
 
         } catch (DeadlineSoonException $e) {
-            $this->logger->notice('Deadline soon: ' . $e->getMessage());
+            $this->logger->notice(sprintf('Deadline soon: %s', $e->getMessage()));
             usleep(self::DEADLINE_MICRO_SECONDS);
         }
     }

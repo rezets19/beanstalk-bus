@@ -19,7 +19,7 @@ class ConfigFactoryTest extends TestCase
 
     public function test_from_result(): void
     {
-        $dto = $this->factory->fromResult($this->getConfig(), '\namespace\ClassName');
+        $dto = $this->factory->create($this->getConfig(), '\namespace\ClassName');
 
         $this->assertSame('\namespace\ClassName', $dto->getClass());
         $this->assertSame(true, $dto->isAsync());

@@ -2,7 +2,7 @@
 
 namespace bus\handler;
 
-interface IHandler
+interface HandlerInterface
 {
     public function handle(object $event, iterable $handlers): void;
 }

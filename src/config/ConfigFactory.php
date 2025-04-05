@@ -4,7 +4,7 @@ namespace bus\config;
 
 class ConfigFactory
 {
-    public function fromResult(array $result, string $class): Config
+    public function create(array $result, string $class): Config
     {
         $dto = new Config();
         $dto->setClass($class);

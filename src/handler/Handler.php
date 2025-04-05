@@ -14,7 +14,7 @@ use ReflectionMethod;
  * Class Handler
  * @package bus
  */
-class Handler implements IHandler
+class Handler implements HandlerInterface
 {
 
     public function __construct(private LoggerInterface $logger)

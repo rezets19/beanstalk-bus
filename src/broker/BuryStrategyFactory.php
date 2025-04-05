@@ -7,20 +7,19 @@ use Psr\Log\LoggerInterface;
 
 class BuryStrategyFactory
 {
-    public function __construct(private LoggerInterface $logger)
+    public function __construct()
     {
     }
 
     /**
      * @param string $class
-     * @return IBuryStrategy
+     * @return BuryStrategyInterface
      * @throws BuryStrategyNotFoundException
      */
-    public function create(string $class): IBuryStrategy
+    public function create(string $class): BuryStrategyInterface
     {
         if (BuryStrategy::class === $class) {
-
-            return new BuryStrategy($this->logger);
+            return new BuryStrategy();
         }
 
         throw new BuryStrategyNotFoundException($class);

@@ -6,9 +6,6 @@ use JsonSerializable;
 
 /**
  * Event example
- *
- * Class TEvent
- * @package bus\impl
  */
 class TEvent implements JsonSerializable
 {
