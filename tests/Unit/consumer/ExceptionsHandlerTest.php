@@ -7,31 +7,40 @@ use bus\consumer\ExceptionsHandler;
 use bus\factory\TagsFactory;
 use bus\interfaces\APMSenderInterface;
 use Exception;
+use Pheanstalk\Contract\PheanstalkManagerInterface;
 use Pheanstalk\Contract\PheanstalkSubscriberInterface;
+use Pheanstalk\Exception\JobNotFoundException;
 use Pheanstalk\Values\Job;
 use Pheanstalk\Values\JobId;
 use Pheanstalk\Values\JobState;
 use Pheanstalk\Values\JobStats;
 use Pheanstalk\Values\TubeName;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use Zfekete\BypassReadonly\BypassReadonly;
 
 class ExceptionsHandlerTest extends TestCase
 {
+
+    private LoggerInterface|MockObject $logger;
+    private MockObject|APMSenderInterface $apm;
+    private TagsFactory|MockObject $tagsFactory;
+    private PheanstalkSubscriberInterface|PheanstalkManagerInterface|MockObject $broker;
+
     protected function setUp(): void
     {
         BypassReadonly::enable();
 
         $this->logger = $this->createMock(LoggerInterface::class);
         $this->apm = $this->createMock(APMSenderInterface::class);
-        $this->fTags = $this->createMock(TagsFactory::class);
-        $this->broker = $this->createMock(PheanstalkSubscriberInterface::class);
+        $this->tagsFactory = $this->createMock(TagsFactory::class);
+        $this->broker = $this->createMockForIntersectionOfInterfaces([PheanstalkSubscriberInterface::class, PheanstalkManagerInterface::class]);
 
         $this->exceptionsHandler = new ExceptionsHandler(
             $this->logger,
             $this->apm,
-            $this->fTags
+            $this->tagsFactory
         );
     }
 
@@ -66,7 +75,9 @@ class ExceptionsHandlerTest extends TestCase
         $config->setMaxRetry(1);
         $config->setPriority(1);
 
+        $this->broker->expects(self::once())->method('statsJob')->with($job)->willReturn($jobStats);
         $this->broker->expects(self::once())->method('release')->with($job, 1, 0);
+        $this->broker->expects(self::never())->method('bury');
 
         $this->exceptionsHandler->handle(
             new Exception('any'),
@@ -75,6 +86,8 @@ class ExceptionsHandlerTest extends TestCase
             $job,
             $config
         );
+
+        self::assertTrue(true);
     }
 
     public function test_ignored()
@@ -88,6 +101,7 @@ class ExceptionsHandlerTest extends TestCase
         $config->setMaxRetry(1);
         $config->setPriority(1);
 
+        $this->broker->expects(self::once())->method('statsJob')->with($job)->willReturn($jobStats);
         $this->broker->expects(self::never())->method('release');
         $this->broker->expects(self::never())->method('bury');
 
@@ -98,6 +112,36 @@ class ExceptionsHandlerTest extends TestCase
             $job,
             $config
         );
+
+        self::assertTrue(true);
+    }
+
+    public function test_job_not_found_exception()
+    {
+        $jobStats = $this->getStats(1, 0, 1, JobState::RESERVED);
+        $job = new Job(new JobId(1), 'data');
+
+        $config = new Config();
+        $config->setMaxAge(1);
+        $config->setMaxKicks(2);
+        $config->setMaxRetry(0);
+        $config->setPriority(1);
+
+        $this->broker->method('statsJob')->with($job)->willReturn($jobStats);
+        $this->broker->expects(self::never())->method('release');
+        $this->broker->expects(self::once())->method('bury')->willThrowException(new JobNotFoundException());
+
+        $this->logger->expects(self::once())->method('error');
+
+        $this->exceptionsHandler->handle(
+            new Exception('any'),
+            $jobStats,
+            $this->broker,
+            $job,
+            $config
+        );
+
+        //self::assertTrue(true);
     }
 
     public function getStats(int $age, int $kicks, int $reserves = 0, $state = JobState::READY): JobStats
