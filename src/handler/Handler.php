@@ -10,9 +10,6 @@ use ReflectionMethod;
 
 /**
  * Calls event handler (class and method)
- *
- * Class Handler
- * @package bus
  */
 class Handler implements HandlerInterface
 {

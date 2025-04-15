@@ -13,7 +13,6 @@ use Pheanstalk\Contract\PheanstalkManagerInterface;
 use Pheanstalk\Contract\PheanstalkPublisherInterface;
 use Pheanstalk\Contract\PheanstalkSubscriberInterface;
 use Pheanstalk\Values\Job;
-use Pheanstalk\Values\JobStats;
 use Psr\Log\LoggerInterface;
 use ReflectionException;
 use Throwable;
@@ -61,7 +60,6 @@ class Bury
      */
     public function consume(Job $job, PheanstalkManagerInterface $manager, PheanstalkSubscriberInterface $subscriber): void
     {
-        /** @var JobStats $jobStats */
         $jobStats = $manager->statsJob($job);
 
         $message = $this->factory->fromString($job->getData());

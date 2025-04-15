@@ -38,7 +38,7 @@ class BuryStrategyTest extends TestCase
         $this->assertInstanceOf(KickCommandInterface::class, $command);
     }
 
-    public function testDelete(): void
+    public function testDeleteWhenKicksMoreThanConfig(): void
     {
         $job = new Job(new JobId(1), 'data');
 
@@ -53,7 +53,7 @@ class BuryStrategyTest extends TestCase
         $this->assertInstanceOf(DeleteCommandInterface::class, $command);
     }
 
-    public function testDelete2(): void
+    public function testDeleteWhenKicksEqualsToConfig(): void
     {
         $job = new Job(new JobId(1), 'data');
 
@@ -68,7 +68,7 @@ class BuryStrategyTest extends TestCase
         $this->assertInstanceOf(DeleteCommandInterface::class, $command);
     }
 
-    public function testNothingToDO(): void
+    public function testNothingToDo(): void
     {
         $this->expectException(NothingToDoException::class);
 

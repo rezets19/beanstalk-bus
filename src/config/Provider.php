@@ -13,8 +13,6 @@ class Provider implements ListenerProviderInterface
     }
 
     /**
-     * @param string $class
-     * @return Config
      * @throws ConfigNotFoundException
      */
     public function getByClass(string $class): Config
@@ -31,8 +29,6 @@ class Provider implements ListenerProviderInterface
     }
 
     /**
-     * @param object $job
-     * @return Config
      * @throws ConfigNotFoundException
      */
     public function getByJob(object $job): Config
@@ -41,8 +37,6 @@ class Provider implements ListenerProviderInterface
     }
 
     /**
-     * @param object $event
-     * @return iterable
      * @throws ConfigNotFoundException
      */
     public function getListenersForEvent(object $event): iterable

@@ -15,7 +15,7 @@ class BodySerializerTest extends TestCase
         $this->serializer = new BodySerializer();
     }
 
-    public function test_to_json(): void
+    public function testToJson(): void
     {
         $event = new TEvent();
         $event->setId(1);

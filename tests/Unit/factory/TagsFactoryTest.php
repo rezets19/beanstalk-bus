@@ -15,7 +15,7 @@ class TagsFactoryTest extends TestCase
         $this->factory = new TagsFactory();
     }
 
-    public function test_create(): void
+    public function testCreate(): void
     {
         $config = new Config();
         $config->setClass(get_class($this));

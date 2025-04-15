@@ -36,9 +36,6 @@ class Listener
         $this->validate();
     }
 
-    /**
-     * @return void
-     */
     public function listen(): void
     {
         $broker = $this->brokerFactory->get(BrokerFactory::DRIVER_BEANSTALK);

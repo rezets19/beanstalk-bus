@@ -24,8 +24,6 @@ class QMessageFactory
     }
 
     /**
-     * @param string $job
-     * @return QMessage
      * @throws ReflectionException
      */
     public function fromString(string $job): QMessage
@@ -55,9 +53,6 @@ class QMessageFactory
     }
 
     /**
-     * @param object $event
-     * @param Config $config
-     * @return QMessage
      * @throws Exception
      */
     public function create(object $event, Config $config): QMessage
@@ -68,11 +63,6 @@ class QMessageFactory
         return $this->fromConfig($config, $message);
     }
 
-    /**
-     * @param Config $config
-     * @param QMessage $message
-     * @return QMessage
-     */
     public function fromConfig(Config $config, QMessage $message): QMessage
     {
         if (null === $message->getDelay()) {
