@@ -12,9 +12,6 @@ use Pheanstalk\Values\JobStats;
 
 /**
  * Default jobs bury strategy
- *
- * Class BuryStrategy
- * @package bus\broker
  */
 class BuryStrategy implements BuryStrategyInterface
 {

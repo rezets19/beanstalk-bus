@@ -11,9 +11,6 @@ use Pheanstalk\Values\TubeName;
 
 class Sender
 {
-    /**
-     * @var BrokerFactory
-     */
     private BrokerFactory $brokerFactory;
 
     public function __construct(private Connection $connection)
@@ -22,9 +19,6 @@ class Sender
     }
 
     /**
-     * @param Config $config
-     * @param QMessage $message
-     * @return void
      * @throws BrokerNotFoundException
      * @throws NoImplementationException
      */

@@ -38,11 +38,11 @@ class BuryTest extends TestCase
 
     private MockObject|BodySerializerInterface $serializer;
 
-    private MockObject|BuryStrategyFactory $fBuryStrategy;
+    private MockObject|BuryStrategyFactory $buryStrategyFactory;
 
-    private MockObject|BuryStrategyInterface $iBuryStrategy;
+    private MockObject|BuryStrategyInterface $buryStrategy;
 
-    private MockObject|ResponseInterface $responseInterface;
+    private MockObject|ResponseInterface $response;
 
     private MockObject|PheanstalkManagerInterface $manager;
 
@@ -60,14 +60,14 @@ class BuryTest extends TestCase
 
         $this->factory = $this->createMock(QMessageFactory::class);
         $this->serializer = $this->createMock(BodySerializerInterface::class);
-        $this->fBuryStrategy = $this->createMock(BuryStrategyFactory::class);
-        $this->iBuryStrategy = $this->createMock(BuryStrategyInterface::class);
-        $this->responseInterface = $this->createMock(ResponseInterface::class);
+        $this->buryStrategyFactory = $this->createMock(BuryStrategyFactory::class);
+        $this->buryStrategy = $this->createMock(BuryStrategyInterface::class);
+        $this->response = $this->createMock(ResponseInterface::class);
 
         $this->checker = new Bury($this->configProvider, $this->logger);
         $this->setMockPropertyObj($this->checker, 'factory', $this->factory);
         $this->setMockPropertyObj($this->checker, 'configProvider', $this->configProvider);
-        $this->setMockPropertyObj($this->checker, 'fBuryStrategy', $this->fBuryStrategy);
+        $this->setMockPropertyObj($this->checker, 'fBuryStrategy', $this->buryStrategyFactory);
     }
 
     public function testKickJob(): void
@@ -80,8 +80,8 @@ class BuryTest extends TestCase
         $this->manager->expects(self::once())->method('statsJob');
         $this->manager->expects(self::once())->method('kickJob')->with($command->getJob());
         $this->factory->expects(self::once())->method('fromString')->willReturn($message);
-        $this->iBuryStrategy->expects(self::once())->method('check')->willReturn($command);
-        $this->fBuryStrategy->expects(self::once())->method('create')->willReturn($this->iBuryStrategy);
+        $this->buryStrategy->expects(self::once())->method('check')->willReturn($command);
+        $this->buryStrategyFactory->expects(self::once())->method('create')->willReturn($this->buryStrategy);
 
         $this->checker->consume($job, $this->manager, $this->subscriber);
     }
@@ -95,8 +95,8 @@ class BuryTest extends TestCase
         $this->manager->expects(self::once())->method('statsJob')->with($job);
         $this->subscriber->expects(self::once())->method('delete')->with($command->getJob());
         $this->factory->expects(self::once())->method('fromString')->willReturn($message);
-        $this->iBuryStrategy->expects(self::once())->method('check')->willReturn($command);
-        $this->fBuryStrategy->expects(self::once())->method('create')->willReturn($this->iBuryStrategy);
+        $this->buryStrategy->expects(self::once())->method('check')->willReturn($command);
+        $this->buryStrategyFactory->expects(self::once())->method('create')->willReturn($this->buryStrategy);
 
         $this->checker->consume($job, $this->manager, $this->subscriber);
     }
@@ -113,8 +113,8 @@ class BuryTest extends TestCase
         $this->manager->expects(self::never())->method('kickJob')->with($command->getJob());
         $this->subscriber->expects(self::never())->method('delete')->with($command->getJob());
         $this->factory->expects(self::once())->method('fromString')->willReturn($message);
-        $this->iBuryStrategy->expects(self::once())->method('check')->willThrowException(new NothingToDoException());
-        $this->fBuryStrategy->expects(self::once())->method('create')->willReturn($this->iBuryStrategy);
+        $this->buryStrategy->expects(self::once())->method('check')->willThrowException(new NothingToDoException());
+        $this->buryStrategyFactory->expects(self::once())->method('create')->willReturn($this->buryStrategy);
 
         $this->checker->consume($job, $this->manager, $this->subscriber);
     }

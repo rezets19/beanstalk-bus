@@ -9,12 +9,6 @@ use Pheanstalk\Exception\NoImplementationException;
 use Pheanstalk\Pheanstalk;
 use Pheanstalk\SocketFactory;
 
-/**
- * Broker factory
- *
- * Class FBroker
- * @package bus
- */
 class BrokerFactory
 {
     const DRIVER_BEANSTALK = 'beanstalk';

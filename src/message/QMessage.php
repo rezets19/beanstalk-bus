@@ -13,28 +13,17 @@ use JsonSerializable;
 class QMessage implements Message, JsonSerializable
 {
     use MessageTrait;
-
-    /**
-     * @var int|null
-     */
     private ?int $timeToRun = null;
-
-    /**
-     * @var int
-     */
     private ?int $delay = null;
-
-    /**
-     * @var int
-     */
     private ?int $priority = null;
-
-    /**
-     * @var string
-     */
     private ?string $queue = null;
 
-    public function __construct(private JsonSerializable $job, private BodySerializerInterface $serializer, array $properties = [], array $headers = [])
+    public function __construct(
+        private JsonSerializable $job,
+        private BodySerializerInterface $serializer,
+        array $properties = [],
+        array $headers = []
+    )
     {
         $this->properties = $properties;
         $this->headers = $headers;

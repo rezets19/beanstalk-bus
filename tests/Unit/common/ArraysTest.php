@@ -3,7 +3,9 @@
 namespace Tests\Unit\common;
 
 use bus\common\Arrays;
-use bus\exception\BrokerNotFoundException;
+use bus\exception\MemoryLimitException;
+use Exception;
+use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 
 class ArraysTest extends TestCase
@@ -15,18 +17,18 @@ class ArraysTest extends TestCase
         $this->arrays = new Arrays();
     }
 
-    public function test_class_exist_true(): void
+    public function testPhpClassExists(): void
     {
-        self::assertTrue($this->arrays->classExist(new \Exception(), [\Exception::class]));
+        self::assertTrue($this->arrays->classExist(new Exception(), [Exception::class]));
     }
 
-    public function test_class_exist_true_2(): void
+    public function testCustomClassExists(): void
     {
-        self::assertTrue($this->arrays->classExist(new \bus\exception\MemoryLimitException(), [\bus\exception\MemoryLimitException::class]));
+        self::assertTrue($this->arrays->classExist(new MemoryLimitException(), [MemoryLimitException::class]));
     }
 
-    public function test_class_exist_false(): void
+    public function testClassDoesntExist(): void
     {
-        self::assertFalse($this->arrays->classExist(new \InvalidArgumentException(), [\Exception::class]));
+        self::assertFalse($this->arrays->classExist(new InvalidArgumentException(), [Exception::class]));
     }
 }

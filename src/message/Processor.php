@@ -16,14 +16,7 @@ use Psr\Log\LoggerInterface;
  */
 class Processor
 {
-    /**
-     * @var QMessageFactory
-     */
     private QMessageFactory $factory;
-
-    /**
-     * @var Provider
-     */
     private Provider $configProvider;
 
     public function __construct(
@@ -38,8 +31,6 @@ class Processor
     }
 
     /**
-     * @param QMessage $message
-     * @return QMessage
      * @throws BrokerNotFoundException
      * @throws ConfigNotFoundException
      * @throws HandlerNotFoundException

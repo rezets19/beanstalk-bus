@@ -3,7 +3,6 @@
 namespace bus\broker;
 
 use bus\broker\exception\BuryStrategyNotFoundException;
-use Psr\Log\LoggerInterface;
 
 class BuryStrategyFactory
 {

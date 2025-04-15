@@ -15,7 +15,6 @@ use Pheanstalk\Contract\PheanstalkManagerInterface;
 use Pheanstalk\Contract\PheanstalkPublisherInterface;
 use Pheanstalk\Contract\PheanstalkSubscriberInterface;
 use Pheanstalk\Exception\DeadlineSoonException;
-use Pheanstalk\Pheanstalk;
 use Psr\Log\LoggerInterface;
 use ReflectionException;
 use Throwable;
@@ -45,9 +44,6 @@ class Consumer
     }
 
     /**
-     * @param string $queueName
-     * @param Pheanstalk $broker
-     * @return void
      * @throws HandlerNotFoundException
      * @throws Throwable
      * @throws ReflectionException

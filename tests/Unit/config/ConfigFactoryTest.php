@@ -10,16 +10,16 @@ use PHPUnit\Framework\TestCase;
 
 class ConfigFactoryTest extends TestCase
 {
-    private ConfigFactory $factory;
+    private ConfigFactory $configFactory;
 
     public function setUp(): void
     {
-        $this->factory = new ConfigFactory();
+        $this->configFactory = new ConfigFactory();
     }
 
-    public function test_from_result(): void
+    public function testFromResult(): void
     {
-        $dto = $this->factory->create($this->getConfig(), '\namespace\ClassName');
+        $dto = $this->configFactory->create($this->getConfig(), '\namespace\ClassName');
 
         $this->assertSame('\namespace\ClassName', $dto->getClass());
         $this->assertSame(true, $dto->isAsync());

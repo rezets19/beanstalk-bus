@@ -21,15 +21,7 @@ use Psr\Log\LoggerInterface;
 class MessageBus implements EventDispatcherInterface
 {
     public const METRIC_JOB_ADD_CNT = 'beanstalk_job_add_cnt';
-
-    /**
-     * @var QMessageFactory
-     */
     private QMessageFactory $messageFactory;
-
-    /**
-     * @var Sender
-     */
     private Sender $sender;
 
     public function __construct(
@@ -56,8 +48,6 @@ class MessageBus implements EventDispatcherInterface
     }
 
     /**
-     * @param object $job
-     * @return object
      * @throws BrokerNotFoundException
      * @throws ConfigNotFoundException
      * @throws NoImplementationException

@@ -16,21 +16,21 @@ class QMessageFactoryTest extends TestCase
 
     public function testFromString(): void
     {
-        $message = $this->factory->fromString(file_get_contents(__DIR__ . '/message1.txt'));
+        $message = $this->factory->fromString(file_get_contents(__DIR__ . '/message.json'));
 
         $this->assertIsArray($message->getHeaders());
     }
 
     public function testFromStringAndHeader(): void
     {
-        $message = $this->factory->fromString(file_get_contents(__DIR__ . '/message_w_header.txt'));
+        $message = $this->factory->fromString(file_get_contents(__DIR__ . '/message_w_header.json'));
 
         $this->assertIsArray($message->getHeaders());
     }
 
     public function testFromStringEmptyBody(): void
     {
-        $message = $this->factory->fromString(file_get_contents(__DIR__ . '/message_empty_body.txt'));
+        $message = $this->factory->fromString(file_get_contents(__DIR__ . '/message_empty_body.json'));
 
         $this->assertIsArray($message->getHeaders());
     }
