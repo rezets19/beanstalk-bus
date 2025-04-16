@@ -21,7 +21,8 @@
     "require-dev": {
         "phpunit/phpunit": "^10.4",
         "zoltanka/bypass-readonly": "^0.0.4",
-        "friendsofphp/php-cs-fixer": "^3.66"
+        "friendsofphp/php-cs-fixer": "^3.66",
+        "phpstan/phpstan": "^2.1"
     },
     "autoload-dev": {
         "psr-4": {
