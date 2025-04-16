@@ -20,8 +20,7 @@ class ExceptionsHandler
         private LoggerInterface    $logger,
         private APMSenderInterface $apm,
         private TagsFactory        $tagsFactory,
-    )
-    {
+    ) {
     }
 
     /**
@@ -35,8 +34,7 @@ class ExceptionsHandler
         PheanstalkSubscriberInterface|PheanstalkManagerInterface $broker,
         JobIdInterface                                           $job,
         Config                                                   $config
-    ): void
-    {
+    ): void {
         $this->logger->notice($t->getMessage());
 
         if (str_contains($t->getMessage(), 'gone away')) {

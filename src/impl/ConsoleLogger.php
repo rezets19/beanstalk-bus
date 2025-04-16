@@ -7,7 +7,6 @@ use Stringable;
 
 class ConsoleLogger implements LoggerInterface
 {
-
     public function emergency(Stringable|string $message, array $context = []): void
     {
         $this->print($message);

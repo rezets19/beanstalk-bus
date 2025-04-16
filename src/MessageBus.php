@@ -31,8 +31,7 @@ class MessageBus implements EventDispatcherInterface
         private APMSenderInterface $apm,
         private TagsFactory        $tagsFactory,
         private HandlerInterface $handler
-    )
-    {
+    ) {
         $this->messageFactory = new QMessageFactory();
         $this->sender = new Sender($this->connection);
     }

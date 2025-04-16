@@ -23,8 +23,7 @@ class QMessage implements Message, JsonSerializable
         private BodySerializerInterface $serializer,
         array $properties = [],
         array $headers = []
-    )
-    {
+    ) {
         $this->properties = $properties;
         $this->headers = $headers;
         $this->redelivered = false;

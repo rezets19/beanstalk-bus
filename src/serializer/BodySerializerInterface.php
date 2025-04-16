@@ -6,5 +6,5 @@ use JsonSerializable;
 
 interface BodySerializerInterface
 {
-    public function toJson(JsonSerializable $target) : string;
+    public function toJson(JsonSerializable $target): string;
 }
