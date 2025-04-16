@@ -22,7 +22,6 @@ use Zfekete\BypassReadonly\BypassReadonly;
 
 class ExceptionsHandlerTest extends TestCase
 {
-
     private LoggerInterface|MockObject $logger;
     private MockObject|APMSenderInterface $apm;
     private TagsFactory|MockObject $tagsFactory;

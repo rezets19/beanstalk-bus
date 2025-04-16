@@ -33,7 +33,7 @@ class BuryStrategy implements BuryStrategyInterface
         if ($jobStats->age >= $config->getMaxAge() && $jobStats->kicks < $config->getMaxKicks()) {
             // Return job into ready state
             return new KickCommandInterface($job, sprintf('Job pause timeout reached, to wait: %s, time: %s', $config->getMaxAge(), $jobStats->age));
-        } else if ($jobStats->kicks >= $config->getMaxKicks()) {
+        } elseif ($jobStats->kicks >= $config->getMaxKicks()) {
             // We don't want to keep it anymore
             return new DeleteCommandInterface($job, sprintf('Max kicks reached: max: %s, total: %s', $config->getMaxKicks(), $jobStats->kicks));
         } else {

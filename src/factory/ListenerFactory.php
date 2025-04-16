@@ -26,8 +26,7 @@ class ListenerFactory
         LoggerInterface    $logger,
         APMSenderInterface $apm,
         HandlerInterface   $handler
-    ): Listener
-    {
+    ): Listener {
         return new Listener(
             queueName: $queue,
             logger: $logger,

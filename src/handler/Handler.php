@@ -13,7 +13,6 @@ use ReflectionMethod;
  */
 class Handler implements HandlerInterface
 {
-
     public function __construct(private LoggerInterface $logger)
     {
     }

@@ -11,7 +11,7 @@ use Pheanstalk\SocketFactory;
 
 class BrokerFactory
 {
-    const DRIVER_BEANSTALK = 'beanstalk';
+    public const DRIVER_BEANSTALK = 'beanstalk';
 
     private static array $brokers = [];
 

@@ -39,8 +39,7 @@ class Consumer
         private Processor          $processor,
         private Arrays             $arrays,
         private ExceptionsHandler  $exceptionsHandler
-    )
-    {
+    ) {
     }
 
     /**

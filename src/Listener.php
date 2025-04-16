@@ -31,8 +31,7 @@ class Listener
         private Restarter       $restarter,
         private Bury            $bury,
         private Consumer        $consumer
-    )
-    {
+    ) {
         $this->validate();
     }
 

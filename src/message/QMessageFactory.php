@@ -9,6 +9,7 @@ use JsonMapper\JsonMapperFactory;
 use JsonMapper\JsonMapperInterface;
 use ReflectionClass;
 use ReflectionException;
+
 use function random_int;
 
 class QMessageFactory

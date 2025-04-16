@@ -52,6 +52,6 @@ class HandlerTest extends TestCase
         $event = new TEvent();
         $event->setId(1);
 
-        $this->handler->call($event, function() { return new TEventHandler(); }, 'handle');
+        $this->handler->call($event, function () { return new TEventHandler(); }, 'handle');
     }
 }

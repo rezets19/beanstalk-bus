@@ -24,8 +24,7 @@ class Processor
         private LoggerInterface  $logger,
         private HandlerInterface $handler,
         private Sender           $sender
-    )
-    {
+    ) {
         $this->configProvider = $this->messageBus->getConfigProvider();
         $this->factory = new QMessageFactory();
     }
