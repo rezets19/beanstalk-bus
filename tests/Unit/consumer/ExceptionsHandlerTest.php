@@ -26,6 +26,7 @@ class ExceptionsHandlerTest extends TestCase
     private MockObject|APMSenderInterface $apm;
     private TagsFactory|MockObject $tagsFactory;
     private PheanstalkSubscriberInterface|PheanstalkManagerInterface|MockObject $broker;
+    private ExceptionsHandler $exceptionsHandler;
 
     protected function setUp(): void
     {

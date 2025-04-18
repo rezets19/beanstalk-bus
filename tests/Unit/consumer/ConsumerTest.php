@@ -33,6 +33,7 @@ class ConsumerTest extends TestCase
     private Arrays|MockObject $arrays;
     private ExceptionsHandler|MockObject $exceptionsHandler;
     private PheanstalkManagerInterface|PheanstalkPublisherInterface|PheanstalkSubscriberInterface|MockObject $broker;
+    private Consumer $consumer;
 
     protected function setUp(): void
     {
