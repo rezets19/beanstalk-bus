@@ -26,3 +26,13 @@ php bin/rise_event.php -h 127.0.0.1 -p 11300 -f src/impl/config.php
 
 ## Laravel package
 https://github.com/rezets19/laravel-beanstalk-bus
+
+## Systemd worker
+Systemd config
+```
+bin/worker.service
+```
+Systemd documentation: https://jolicode.com/blog/symfony-messenger-systemd or 
+```sh
+man systemd 
+``` 

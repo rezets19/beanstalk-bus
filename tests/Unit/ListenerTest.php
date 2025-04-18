@@ -32,6 +32,7 @@ class ListenerTest extends TestCase
     private Bury|MockObject $bury;
     private Consumer|MockObject $consumer;
     private Pheanstalk|MockObject $broker;
+    private Listener $listener;
 
     protected function setUp(): void
     {
