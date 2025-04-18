@@ -28,9 +28,9 @@ php bin/rise_event.php -h 127.0.0.1 -p 11300 -f src/impl/config.php
 https://github.com/rezets19/laravel-beanstalk-bus
 
 ## Systemd worker
-Systemd config
-```
-bin/worker.service
+Systemd config, change paths before copy.
+```sh
+copy bin/worker.service.dist /etc/systemd/system/worker.service
 ```
 Systemd documentation: https://jolicode.com/blog/symfony-messenger-systemd or 
 ```sh

@@ -1,0 +1,13 @@
+[Unit]
+StartLimitIntervalSec=20s
+StartLimitBurst=5
+
+[Service]
+ExecStart=/usr/bin/php -d memory_limit=-1 ?/beanstalk-bus/bin/worker.php -h 127.0.0.1 -p 11300 -q test -t /var/log/worker.log -f ?/beanstalk-bus/src/impl/config.php
+Restart=always
+RestartSec=1
+TimeoutSec=300
+User=daemon
+
+[Install]
+WantedBy=multi-user.target
